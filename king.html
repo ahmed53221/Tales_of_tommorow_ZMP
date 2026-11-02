@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>King Putsch - 3D Standoff</title>
+<style>
+  body { margin: 0; overflow: hidden; background: #050505; font-family: 'Arial', sans-serif; }
+  canvas { display: block; }
+  #ui-overlay {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none;
+    display: flex; flex-direction: column; justify-content: space-between;
+    padding: 20px; box-sizing: border-box;
+  }
+  #hud { display: flex; justify-content: space-between; color: #fff; text-shadow: 0 0 10px #000; }
+  .stat-box {
+    background: rgba(0,0,0,0.6); border: 1px solid #444;
+    padding: 10px 15px; border-radius: 5px; min-width: 180px;
+  }
+  .stat-label { font-size: 12px; color: #aaa; text-transform: uppercase; letter-spacing: 1px; }
+  .stat-value { font-size: 22px; font-weight: bold; margin-top: 5px; }
+  .bar { width: 100%; height: 8px; background: #333; margin-top: 5px; border-radius: 4px; overflow: hidden; }
+  .fill-pressure { height: 100%; background: #ff4444; width: 30%; transition: width 0.3s; }
+  .fill-cohesion { height: 100%; background: #44ff44; width: 90%; transition: width 0.3s; }
+  #controls {
+    display: flex; gap: 8px; justify-content: center;
+    pointer-events: auto; padding-bottom: 20px; flex-wrap: wrap;
+  }
+  .btn {
+    background: rgba(20,20,20,0.9); border: 1px solid #555; color: #eee;
+    padding: 10px 16px; cursor: pointer; text-transform: uppercase;
+    font-weight: bold; letter-spacing: 1px; transition: all 0.2s; border-radius: 4px; font-size: 13px;
+  }
+  .btn:hover { background: #333; border-color: #ffd700; color: #ffd700; }
+  .btn.control { border-color: #4488cc; color: #88bbee; }
+  .btn.control:hover { background: #002244; border-color: #66aaff; color: #fff; }
+  .btn.fire { border-color: #ff0000; color: #ff6666; }
+  .btn.fire:hover { background: #440000; border-color: #ff0000; color: #fff; }
+  #log {
+    position: absolute; bottom: 90px; right: 20px; width: 280px; max-height: 160px;
+    overflow-y: auto; background: rgba(0,0,0,0.7); border: 1px solid #333;
+    padding: 10px; color: #ccc; font-size: 12px; pointer-events: auto; border-radius: 4px;
+  }
+  .log-entry { border-bottom: 1px solid #222; padding: 4px 0; }
+</style>
+</head>
+<body>
+
+<div id="ui-overlay">
+  <div id="hud">
+    <div class="stat-box">
+      <div class="stat-label">Crowd Pressure</div>
+      <div class="stat-value" id="pressure-val">30%</div>
+      <div class="bar"><div class="fill-pressure" id="pressure-bar"></div></div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">Legion Cohesion</div>
+      <div class="stat-value" id="cohesion-val">90%</div>
+      <div class="bar"><div class="fill-cohesion" id="cohesion-bar"></div></div>
+    </div>
+  </div>
+
+  <div id="controls">
+    <button class="btn control" onclick="issueOrder('address_nation')">Address the Nation</button>
+    <button class="btn" onclick="issueOrder('speak')">Speak</button>
+    <button class="btn" onclick="issueOrder('negotiate')">Negotiate</button>
+    <button class="btn" onclick="issueOrder('hold')">Hold Line</button>
+    <button class="btn" onclick="issueOrder('shield_wall')">Shield Wall</button>
+    <button class="btn" onclick="issueOrder('advance')">Advance</button>
+    <button class="btn" onclick="issueOrder('withdraw')">Withdraw</button>
+    <button class="btn control" onclick="issueOrder('water_cannon')">Water Cannon</button>
+    <button class="btn control" onclick="issueOrder('tear_gas')">Tear Gas</button>
+    <button class="btn control" onclick="issueOrder('baton_charge')">Baton Charge</button>
+    <button class="btn control" onclick="issueOrder('arrest_leaders')">Arrest Leaders</button>
+    <button class="btn control" onclick="issueOrder('fix_bayonets')">Fix Bayonets</button>
+    <button class="btn control" onclick="issueOrder('turn_it_up')">Turn It Up</button>
+    <button class="btn fire" onclick="issueOrder('cut_power')">Cut the Power</button>
+    <button class="btn fire" onclick="issueOrder('fire_warning')">Warning Shots</button>
+    <button class="btn fire" onclick="issueOrder('live_fire_warning')">Live-Fire Warning</button>
+    <button class="btn fire" onclick="issueOrder('fire_crowd')">Fire on Crowd</button>
+  </div>
+</div>
+
+<div id="log"></div>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+
+// --- SCENE SETUP ---
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x0a0a12);
+scene.fog = new THREE.FogExp2(0x0a0a12, 0.018);
+
+const camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.1, 1000);
+camera.position.set(0, 14, 45);
+camera.lookAt(0, 1.5, -10);
+
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.2;
+document.body.appendChild(renderer.domElement);
+
+// --- LIGHTING ---
+const ambientLight = new THREE.AmbientLight(0x223344, 1.2);
+scene.add(ambientLight);
+
+const sunLight = new THREE.DirectionalLight(0xffaa66, 1.0);
+sunLight.position.set(-30, 25, 15);
+sunLight.castShadow = true;
+sunLight.shadow.mapSize.set(2048, 2048);
+sunLight.shadow.camera.near = 0.5;
+sunLight.shadow.camera.far = 150;
+sunLight.shadow.camera.left = -60;
+sunLight.shadow.camera.right = 60;
+sunLight.shadow.camera.top = 60;
+sunLight.shadow.camera.bottom = -60;
+scene.add(sunLight);
+
+const dockLight = new THREE.SpotLight(0xffdd99, 200);
+dockLight.position.set(-30, 18, 10);
+dockLight.angle = Math.PI / 4;
+dockLight.penumbra = 0.5;
+dockLight.decay = 2;
+dockLight.distance = 80;
+dockLight.castShadow = true;
+dockLight.target.position.set(-10, 0, -10);
+scene.add(dockLight);
+scene.add(dockLight.target);
+
+const policeRed = new THREE.PointLight(0xff0000, 60, 40);
+policeRed.position.set(-15, 6, 5);
+scene.add(policeRed);
+const policeBlue = new THREE.PointLight(0x0000ff, 60, 40);
+policeBlue.position.set(15, 6, 5);
+scene.add(policeBlue);
+
+// --- ENVIRONMENT ---
+const groundGeo = new THREE.PlaneGeometry(300, 300);
+const groundMat = new THREE.MeshStandardMaterial({ color: 0x1a1a1e, roughness: 0.9, metalness: 0.1 });
+const ground = new THREE.Mesh(groundGeo, groundMat);
+ground.rotation.x = -Math.PI / 2;
+ground.receiveShadow = true;
+scene.add(ground);
+
+const lineGeo = new THREE.PlaneGeometry(0.4, 300);
+const lineMat = new THREE.MeshBasicMaterial({ color: 0x444444, transparent: true, opacity: 0.25 });
+for (let i = -5; i <= 5; i++) {
+  const line = new THREE.Mesh(lineGeo, lineMat);
+  line.rotation.x = -Math.PI / 2;
+  line.position.set(i * 8, 0.01, 0);
+  scene.add(line);
+}
+
+for (let i = 0; i < 18; i++) {
+  const w = 12 + Math.random() * 20;
+  const h = 25 + Math.random() * 45;
+  const d = 12 + Math.random() * 20;
+  const bGeo = new THREE.BoxGeometry(w, h, d);
+  const bMat = new THREE.MeshStandardMaterial({ color: 0x050508 });
+  const building = new THREE.Mesh(bGeo, bMat);
+  building.position.set((i - 9) * 22, h/2, -70 - Math.random() * 30);
+  scene.add(building);
+}
+
+// <<< NEW: SOUND TRUCK parked at the far end of the lot
+const truck = new THREE.Group();
+const truckBody = new THREE.Mesh(
+  new THREE.BoxGeometry(3.6, 1.4, 6.0),
+  new THREE.MeshStandardMaterial({ color: 0x2b2b33, roughness: 0.7 })
+);
+truckBody.position.y = 1.1;
+truckBody.castShadow = true;
+truck.add(truckBody);
+
+const truckCab = new THREE.Mesh(
+  new THREE.BoxGeometry(3.4, 1.3, 2.0),
+  new THREE.MeshStandardMaterial({ color: 0x222228, roughness: 0.7 })
+);
+truckCab.position.set(0, 2.05, 2.4);
+truckCab.castShadow = true;
+truck.add(truckCab);
+
+for (let sx = -1; sx <= 1; sx += 2) {
+  const spk = new THREE.Mesh(
+    new THREE.BoxGeometry(1.0, 1.0, 0.6),
+    new THREE.MeshStandardMaterial({ color: 0x111111 })
+  );
+  spk.position.set(sx * 1.2, 2.4, -1.2);
+  truck.add(spk);
+}
+for (let wx = -1; wx <= 1; wx += 2) {
+  for (let wz = -1; wz <= 1; wz += 2) {
+    const wheel = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.55, 0.55, 0.35, 12),
+      new THREE.MeshStandardMaterial({ color: 0x0a0a0a })
+    );
+    wheel.rotation.z = Math.PI / 2;
+    wheel.position.set(wx * 1.75, 0.55, wz * 2.0);
+    truck.add(wheel);
+  }
+}
+truck.position.set(0, 0, -27);
+truck.rotation.y = Math.PI;
+scene.add(truck);
+
+const truckRed = new THREE.PointLight(0xff2200, 0, 12);
+truckRed.position.set(-1.2, 2.6, -27);
+scene.add(truckRed);
+const truckBlue = new THREE.PointLight(0x2244ff, 0, 12);
+truckBlue.position.set(1.2, 2.6, -27);
+scene.add(truckBlue);
+
+const soundRings = [];
+function spawnSoundRing() {
+  const geo = new THREE.RingGeometry(0.1, 0.3, 24);
+  const mat = new THREE.MeshBasicMaterial({
+    color: 0xffbb55, transparent: true, opacity: 0.7, side: THREE.DoubleSide
+  });
+  const ring = new THREE.Mesh(geo, mat);
+  ring.rotation.x = -Math.PI / 2;
+  ring.position.set(0, 0.06, -27);
+  scene.add(ring);
+  soundRings.push({ mesh: ring, age: 0, maxAge: 90 });
+}
+
+// <<< NEW: RADIO ANTENNA near the Legion loading dock
+const radioMast = new THREE.Mesh(
+  new THREE.CylinderGeometry(0.08, 0.08, 6, 6),
+  new THREE.MeshStandardMaterial({ color: 0x333333, metalness: 0.5 })
+);
+radioMast.position.set(-28, 3, 8);
+scene.add(radioMast);
+const radioBulb = new THREE.PointLight(0xffdd44, 0, 8);
+radioBulb.position.set(-28, 6.2, 8);
+scene.add(radioBulb);
+
+// --- CHARACTERS ---
+function createSoldier() {
+  const group = new THREE.Group();
+
+  const legMat = new THREE.MeshStandardMaterial({ color: 0x14180f });
+  const leftLeg = new THREE.Mesh(new THREE.BoxGeometry(0.28, 0.75, 0.28), legMat);
+  leftLeg.position.set(-0.15, 0.375, 0); leftLeg.castShadow = true;
+  group.add(leftLeg);
+  const rightLeg = new THREE.Mesh(new THREE.BoxGeometry(0.28, 0.75, 0.28), legMat);
+  rightLeg.position.set(0.15, 0.375, 0); rightLeg.castShadow = true;
+  group.add(rightLeg);
+
+  const torso = new THREE.Mesh(
+    new THREE.BoxGeometry(0.7, 0.9, 0.4),
+    new THREE.MeshStandardMaterial({ color: 0x1f2a1a, roughness: 0.85 })
+  );
+  torso.position.y = 1.2; torso.castShadow = true;
+  group.add(torso);
+
+  const armMat = new THREE.MeshStandardMaterial({ color: 0x1a2416, roughness: 0.85 });
+  const leftArm = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.75, 0.2), armMat);
+  leftArm.position.set(-0.5, 1.2, 0.1); leftArm.castShadow = true;
+  group.add(leftArm);
+  const rightArm = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.75, 0.2), armMat);
+  rightArm.position.set(0.5, 1.2, 0.1); rightArm.castShadow = true;
+  group.add(rightArm);
+
+  const head = new THREE.Mesh(
+    new THREE.SphereGeometry(0.22, 10, 10),
+    new THREE.MeshStandardMaterial({ color: 0x3a4a2a, roughness: 0.9 })
+  );
+  head.position.y = 1.9; head.castShadow = true;
+  group.add(head);
+
+  const helmet = new THREE.Mesh(
+    new THREE.SphereGeometry(0.28, 12, 12, 0, Math.PI * 2, 0, Math.PI * 0.6),
+    new THREE.MeshStandardMaterial({ color: 0x2f3a1e, roughness: 0.7, metalness: 0.2 })
+  );
+  helmet.position.y = 1.95; helmet.castShadow = true;
+  group.add(helmet);
+
+  const rifle = new THREE.Mesh(
+    new THREE.BoxGeometry(0.08, 0.08, 1.3),
+    new THREE.MeshStandardMaterial({ color: 0x0a0a0a, metalness: 0.6 })
+  );
+  rifle.position.set(0.42, 1.3, 0.45);
+  rifle.rotation.x = -0.15;
+  rifle.name = 'rifle';
+  group.add(rifle);
+
+  return group;
+}
+
+function createProtester() {
+  const group = new THREE.Group();
+
+  const clothing = [
+    0x8a5a4a, 0x4a5a8a, 0x6a6a4a, 0x8a4a5a,
+    0x5a5a5a, 0x7a6a5a, 0x3a5a5a,
+  ];
+  const skinTones = [0xd2b48c, 0xc49a6c, 0xa87a52, 0xe0c8a0];
+
+  const shirt = clothing[Math.floor(Math.random() * clothing.length)];
+  const pants = clothing[Math.floor(Math.random() * clothing.length)];
+  const skin = skinTones[Math.floor(Math.random() * skinTones.length)];
+
+  const legMat = new THREE.MeshStandardMaterial({ color: pants, roughness: 0.9 });
+  const leftLeg = new THREE.Mesh(new THREE.BoxGeometry(0.22, 0.7, 0.22), legMat);
+  leftLeg.position.set(-0.12, 0.35, 0); leftLeg.castShadow = true;
+  group.add(leftLeg);
+  const rightLeg = new THREE.Mesh(new THREE.BoxGeometry(0.22, 0.7, 0.22), legMat);
+  rightLeg.position.set(0.12, 0.35, 0); rightLeg.castShadow = true;
+  group.add(rightLeg);
+
+  const torso = new THREE.Mesh(
+    new THREE.BoxGeometry(0.6, 0.8, 0.35),
+    new THREE.MeshStandardMaterial({ color: shirt, roughness: 0.9 })
+  );
+  torso.position.y = 1.05; torso.castShadow = true;
+  group.add(torso);
+
+  const armMat = new THREE.MeshStandardMaterial({ color: shirt, roughness: 0.9 });
+  const leftArm = new THREE.Mesh(new THREE.BoxGeometry(0.18, 0.7, 0.18), armMat);
+  leftArm.position.set(-0.4, 1.2, 0); leftArm.rotation.z = 0.3; leftArm.castShadow = true;
+  group.add(leftArm);
+  const rightArm = new THREE.Mesh(new THREE.BoxGeometry(0.18, 0.7, 0.18), armMat);
+  rightArm.position.set(0.4, 1.2, 0); rightArm.rotation.z = -0.3; rightArm.castShadow = true;
+  group.add(rightArm);
+
+  const head = new THREE.Mesh(
+    new THREE.SphereGeometry(0.2, 10, 10),
+    new THREE.MeshStandardMaterial({ color: skin, roughness: 0.9 })
+  );
+  head.position.y = 1.75; head.castShadow = true;
+  group.add(head);
+
+  const hair = new THREE.Mesh(
+    new THREE.SphereGeometry(0.21, 10, 10, 0, Math.PI * 2, 0, Math.PI * 0.5),
+    new THREE.MeshStandardMaterial({ color: 0x2a1a0a, roughness: 1 })
+  );
+  hair.position.y = 1.78;
+  group.add(hair);
+
+  return group;
+}
+
+const soldiers = [];
+const protesters = [];
+
+const legionSize = 40;
+for (let i = 0; i < legionSize; i++) {
+  const s = createSoldier();
+  s.position.set(-15 + (i * 0.85), 0, 0);
+  s.rotation.y = 0;
+  scene.add(s);
+  soldiers.push(s);
+}
+
+const crowdSize = 150;
+for (let i = 0; i < crowdSize; i++) {
+  const p = createProtester();
+  const x = (Math.random() - 0.5) * 45;
+  const z = -5 - Math.random() * 20;
+  p.position.set(x, 0, z);
+  p.rotation.y = Math.random() * Math.PI * 2;
+  const scale = 0.85 + Math.random() * 0.35;
+  p.scale.set(scale, scale, scale);
+  scene.add(p);
+  protesters.push(p);
+}
+
+// --- SMOKE PARTICLES ---
+function createSmokeTexture() {
+  const c = document.createElement('canvas'); c.width = 64; c.height = 64;
+  const ctx = c.getContext('2d');
+  const g = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
+  g.addColorStop(0, 'rgba(200,200,200,0.6)');
+  g.addColorStop(0.5, 'rgba(150,150,150,0.3)');
+  g.addColorStop(1, 'rgba(100,100,100,0)');
+  ctx.fillStyle = g; ctx.fillRect(0, 0, 64, 64);
+  return new THREE.CanvasTexture(c);
+}
+const smokeTexture = createSmokeTexture();
+const smokeParticles = [];
+for (let i = 0; i < 25; i++) {
+  const mat = new THREE.SpriteMaterial({ map: smokeTexture, color: 0xcccccc, transparent: true, opacity: 0.5, depthWrite: false });
+  const smoke = new THREE.Sprite(mat);
+  smoke.position.set(
+    (Math.random() - 0.5) * 50,
+    Math.random() * 4,
+    -10 - Math.random() * 20
+  );
+  smoke.scale.set(10, 10, 1);
+  smoke.userData = { speed: 0.02 + Math.random() * 0.05, offset: Math.random() * Math.PI * 2 };
+  scene.add(smoke);
+  smokeParticles.push(smoke);
+}
+
+// --- GAME STATE ---
+let gameState = {
+  beat: 1, maxBeats: 25,          // <<< NEW: was 12
+  crowdPressure: 30, legionCohesion: 90, legionMorale: 100,
+  warningShotFired: false, phase: 'active',
+  injuries: 0,
+  liveFireWarningUsed: false,
+  tearGasUsed: 0,
+  waterCannonUsed: 0,
+  batonChargeUsed: 0,
+  arrestAttempts: 0,
+  arrestedLeaders: 0,
+  negotiated: false,
+  bayonetsFixed: false,
+  // <<< NEW
+  soundTruckPlaying: true,
+  soundTruckSeized: false,
+  radioUsed: false
+};
+
+function updateUI() {
+  document.getElementById('pressure-val').textContent = Math.round(gameState.crowdPressure) + '%';
+  document.getElementById('pressure-bar').style.width = gameState.crowdPressure + '%';
+  document.getElementById('cohesion-val').textContent = Math.round(gameState.legionCohesion) + '%';
+  document.getElementById('cohesion-bar').style.width = gameState.legionCohesion + '%';
+}
+
+function addLog(msg) {
+  const logDiv = document.getElementById('log');
+  const entry = document.createElement('div');
+  entry.className = 'log-entry';
+  entry.textContent = msg;
+  logDiv.prepend(entry);
+}
+
+// Keep the Legion line outside the crowd no matter what order was issued.
+function clampSoldiers() {
+  soldiers.forEach(s => {
+    if (s.position.z < -4) s.position.z = -4;   // can't go into the crowd
+    if (s.position.z >  4) s.position.z =  4;   // can't retreat off the map
+  });
+}
+
+// --- ANIMATION LOOP ---
+let time = 0;
+function animate() {
+  requestAnimationFrame(animate);
+  time += 0.01;
+
+  smokeParticles.forEach(p => {
+    p.position.y += p.userData.speed;
+    p.position.x += Math.sin(time + p.userData.offset) * 0.05;
+    p.material.opacity = 0.25 + Math.sin(time * 2 + p.userData.offset) * 0.15;
+    if (p.position.y > 12) p.position.y = 0;
+  });
+
+  policeRed.intensity = 60 + Math.sin(time * 10) * 60;
+  policeBlue.intensity = 60 + Math.cos(time * 10) * 60;
+
+  // <<< NEW: truck lights + sound rings
+  if (gameState.soundTruckPlaying) {
+    truckRed.intensity = 30 + Math.sin(time * 8) * 30;
+    truckBlue.intensity = 30 + Math.cos(time * 8) * 30;
+    if (Math.floor(time * 60) % 90 === 0) spawnSoundRing();
+  } else {
+    truckRed.intensity = Math.max(0, truckRed.intensity - 1);
+    truckBlue.intensity = Math.max(0, truckBlue.intensity - 1);
+  }
+  for (let i = soundRings.length - 1; i >= 0; i--) {
+    const r = soundRings[i];
+    r.age++;
+    const s = 1 + r.age * 0.15;
+    r.mesh.scale.set(s, s, s);
+    r.mesh.material.opacity = Math.max(0, 0.7 * (1 - r.age / r.maxAge));
+    if (r.age >= r.maxAge) { scene.remove(r.mesh); soundRings.splice(i, 1); }
+  }
+
+  protesters.forEach((p, i) => {
+    p.position.y = Math.abs(Math.sin(time * 2 + i)) * 0.05;
+    p.rotation.y += Math.sin(time + i) * 0.001;
+  });
+
+  if (gameState.crowdPressure > 70) {
+    camera.position.x = (Math.random() - 0.5) * 0.4;
+    camera.position.y = 14 + (Math.random() - 0.5) * 0.4;
+  } else {
+    camera.position.x = 0; camera.position.y = 14;
+  }
+  camera.lookAt(0, 1.5, -10);
+
+  renderer.render(scene, camera);
+}
+
+// --- ORDER LOGIC ---
+window.issueOrder = function(orderId) {
+  if (gameState.phase !== 'active') return;
+  addLog(`> ${orderId.toUpperCase()}`);
+
+  if (orderId === 'speak') {
+    gameState.crowdPressure = Math.max(0, gameState.crowdPressure - 5);
+    gameState.legionMorale = Math.max(0, gameState.legionMorale - 2);
+    addLog('The Marshal addresses the crowd.');
+  } else if (orderId === 'hold') {
+    gameState.crowdPressure += 2;
+    gameState.legionMorale = Math.max(0, gameState.legionMorale - 3);
+    addLog('The Legion holds. The crowd grows louder.');
+  } else if (orderId === 'advance') {
+    gameState.crowdPressure += 10;
+    gameState.legionMorale = Math.max(0, gameState.legionMorale - 4);
+    // Legion steps forward — but never past the front rank of the crowd
+    soldiers.forEach(s => {
+      if (s.position.z > -4) s.position.z -= 0.5;
+      if (s.position.z < -4) s.position.z = -4;
+    });
+    // The crowd retreats with them — they give ground, they don't get walked through
+    protesters.forEach(p => {
+      p.position.z -= 0.5;
+      // soft cap so the crowd doesn't get pushed off the map
+      if (p.position.z < -40) p.position.z = -40;
+    });
+    addLog('The Legion advances one step. The crowd shuffles back.');
+  } else if (orderId === 'withdraw') {
+    gameState.crowdPressure = Math.max(0, gameState.crowdPressure - 8);
+    gameState.legionMorale = Math.max(0, gameState.legionMorale - 6);
+    // Legion steps back, but no further than +4 (they can't retreat into the building)
+    soldiers.forEach(s => {
+      if (s.position.z < 4) s.position.z += 0.5;
+    });
+    // Crowd smells weakness and edges forward — but never into the Legion line
+    protesters.forEach(p => {
+      p.position.z += 0.3;
+      if (p.position.z > -5) p.position.z = -5;   // hard stop at the Legion line
+    });
+    addLog('The Legion takes a step back. The crowd presses forward.');
+
+  // ============================================================
+  // NEW CROWD-CONTROL ORDERS
+  // ============================================================
+  } else if (orderId === 'shield_wall') {
+    gameState.crowdPressure = Math.max(0, gameState.crowdPressure - 3);
+    gameState.legionMorale = Math.max(0, gameState.legionMorale - 1);
+    gameState.legionCohesion = Math.min(100, gameState.legionCohesion + 2);
+    addLog('The Legion locks shields. A wall of steel.');
+    soldiers.forEach((s) => {
+      s.position.y -= 0.08;
+      setTimeout(() => { s.position.y += 0.08; }, 350);
+    });
+    const shimmer = new THREE.PointLight(0x88aaff, 40, 25);
+    shimmer.position.set(0, 2, 0);
+    scene.add(shimmer);
+    setTimeout(() => scene.remove(shimmer), 400);
+
+  } else if (orderId === 'water_cannon') {
+    gameState.waterCannonUsed++;
+    const wcDim = Math.max(0.4, Math.pow(0.8, gameState.waterCannonUsed - 1));
+    gameState.crowdPressure = Math.max(0, gameState.crowdPressure - 20 * wcDim);
+    gameState.legionMorale = Math.max(0, gameState.legionMorale - 2);
+    addLog('Water cannon sweep the front rank. (x' + gameState.waterCannonUsed + ')');
+    for (let i = 0; i < 40; i++) {
+      const drop = new THREE.Mesh(
+        new THREE.SphereGeometry(0.12, 6, 6),
+        new THREE.MeshBasicMaterial({ color: 0x99ccff, transparent: true, opacity: 0.85 })
+      );
+      drop.position.set(18, 2.2, 3);
+      scene.add(drop);
+      const vx = -0.35 - Math.random() * 0.25;
+      const vz = -0.45 - Math.random() * 0.35;
+      let vy = 0.15 + Math.random() * 0.25;
+      const life = 60 + Math.random() * 30;
+      let age = 0;
+      const anim = () => {
+        if (age++ > life) { scene.remove(drop); return; }
+        drop.position.x += vx;
+        drop.position.z += vz;
+        drop.position.y += vy;
+        vy -= 0.02;
+        if (drop.position.y < 0.05) { scene.remove(drop); return; }
+        drop.material.opacity *= 0.985;
+        requestAnimationFrame(anim);
+      };
+      anim();
+    }
+    const hose = new THREE.PointLight(0x88bbff, 80, 20);
+    hose.position.set(18, 2.5, 3);
+    scene.add(hose);
+    setTimeout(() => scene.remove(hose), 500);
+
+  } else if (orderId === 'tear_gas') {
+    gameState.tearGasUsed++;
+    const tgDim = Math.max(0.35, Math.pow(0.75, gameState.tearGasUsed - 1));
+    gameState.crowdPressure = Math.max(0, gameState.crowdPressure - 28 * tgDim);
+    gameState.legionMorale = Math.max(0, gameState.legionMorale - 8);
+    gameState.legionCohesion = Math.max(0, gameState.legionCohesion - 5);
+    addLog('Tear gas! The crowd scatters, coughing. (x' + gameState.tearGasUsed + ')');
+
+    const canister = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.09, 0.09, 0.45, 8),
+      new THREE.MeshStandardMaterial({ color: 0x555555, metalness: 0.4, roughness: 0.6 })
+    );
+    canister.position.set(-2 + Math.random() * 4, 1.4, -1);
+    canister.rotation.x = Math.PI / 2;
+    scene.add(canister);
+
+    let cvx = -0.05 + Math.random() * 0.1;
+    let cvy = 0.35;
+    let cvz = -0.55 - Math.random() * 0.15;
+    let canisterFrames = 0;
+    const canisterAnim = () => {
+      canister.position.x += cvx;
+      canister.position.y += cvy;
+      canister.position.z += cvz;
+      cvy -= 0.035;
+      canister.rotation.z += 0.4;
+      canisterFrames++;
+      if (canister.position.y <= 0.1) {
+        canister.position.y = 0.1;
+        startGasCloud(canister.position.clone());
+        scene.remove(canister);
+        return;
+      }
+      if (canisterFrames < 60) requestAnimationFrame(canisterAnim);
+      else { scene.remove(canister); startGasCloud(canister.position.clone()); }
+    };
+    canisterAnim();
+
+    function startGasCloud(origin) {
+      for (let i = 0; i < 22; i++) {
+        const gasMat = new THREE.SpriteMaterial({
+          map: smokeTexture, color: 0xaaddaa, transparent: true,
+          opacity: 0.7, depthWrite: false
+        });
+        const gas = new THREE.Sprite(gasMat);
+        gas.position.copy(origin);
+        gas.position.x += (Math.random() - 0.5) * 3;
+        gas.position.z += (Math.random() - 0.5) * 3;
+        gas.position.y += Math.random() * 0.8;
+        gas.scale.set(3, 3, 1);
+        scene.add(gas);
+        const life = 150 + Math.random() * 60;
+        let age = 0;
+        const speed = 0.4 + Math.random() * 0.5;
+        const anim = () => {
+          if (age++ > life) { scene.remove(gas); return; }
+          gas.position.z -= 0.15 * speed;
+          gas.position.x += (Math.random() - 0.5) * 0.05;
+          gas.position.y += 0.02;
+          const s = gas.scale.x + 0.08;
+          gas.scale.set(s, s, 1);
+          gas.material.opacity *= 0.993;
+          requestAnimationFrame(anim);
+        };
+        anim();
+      }
+      const gasLight = new THREE.PointLight(0xaaffaa, 60, 22);
+      gasLight.position.copy(origin);
+      gasLight.position.y += 1;
+      scene.add(gasLight);
+      setTimeout(() => scene.remove(gasLight), 900);
+    }
+
+  } else if (orderId === 'baton_charge') {
+    gameState.batonChargeUsed++;
+    gameState.injuries += 2;
+    gameState.crowdPressure = Math.max(0, gameState.crowdPressure - 18);
+    gameState.legionMorale = Math.max(0, gameState.legionMorale - 10);
+    addLog('Baton charge! The front rank swings.');
+    // Soldiers lunge forward, hit the line, then fall back to where they started
+    soldiers.forEach((s) => {
+      const startZ = s.position.z;
+      const peakZ = Math.max(-4, startZ - 2.2);   // never past -4
+      let t = 0;
+      const rush = () => {
+        t++;
+        if (t < 12) {
+          s.position.z = startZ + (peakZ - startZ) * (t / 12);
+          requestAnimationFrame(rush);
+        } else {
+          let back = 0;
+          const settle = () => {
+            back++;
+            s.position.z = peakZ + (back / 20) * (startZ - peakZ);   // return to startZ
+            if (back < 20) requestAnimationFrame(settle);
+          };
+          settle();
+        }
+      };
+      rush();
+    });
+    // Front rank of the crowd gets shoved back — those closest to the cops
+    protesters.forEach(p => {
+      if (p.position.z > -12) {
+        p.position.z -= 1.5;
+      } else {
+        p.position.z -= 0.4;   // softer ripple through the middle of the crowd
+      }
+      if (p.position.z < -40) p.position.z = -40;
+    });
+
+  } else if (orderId === 'arrest_leaders') {
+    gameState.arrestAttempts++;
+    gameState.arrestedLeaders++;
+    gameState.legionMorale = Math.min(100, gameState.legionMorale + 2);
+    gameState.crowdPressure = Math.max(0, gameState.crowdPressure - 6);
+    if (Math.random() < 0.25) {
+      gameState.crowdPressure += 15;
+      addLog('The crowd surges — they saw the arrest!');
+    } else {
+      addLog('Ringleaders grabbed. The crowd wavers.');
+    }
+    const frontMost = protesters
+      .filter(p => p.visible && p.position.z > -12)
+      .sort((a, b) => b.position.z - a.position.z)[0];
+    if (frontMost) {
+      const startZ = frontMost.position.z;
+      const endZ = startZ + 6;
+      const startX = frontMost.position.x;
+      const endX = startX + 2;
+      let t = 0;
+      const grab = () => {
+        t++;
+        if (t > 40) { frontMost.visible = false; return; }
+        frontMost.position.z = startZ + (endZ - startZ) * (t / 40);
+        frontMost.position.x = startX + (endX - startX) * (t / 40);
+        requestAnimationFrame(grab);
+      };
+      grab();
+    }
+
+  } else if (orderId === 'fix_bayonets') {
+    gameState.bayonetsFixed = true;
+    gameState.crowdPressure += 12;
+    gameState.legionMorale = Math.min(100, gameState.legionMorale + 5);
+    addLog('Fix bayonets! Steel catches the light.');
+    soldiers.forEach(s => {
+      const rifle = s.getObjectByName('rifle');
+      if (rifle && !rifle.userData.hasBayonet) {
+        const bayonet = new THREE.Mesh(
+          new THREE.CylinderGeometry(0.02, 0.02, 0.5, 6),
+          new THREE.MeshStandardMaterial({ color: 0xdddddd, metalness: 0.9, roughness: 0.2 })
+        );
+        bayonet.position.z = 0.9;
+        bayonet.rotation.x = Math.PI / 2;
+        rifle.add(bayonet);
+        rifle.rotation.x -= 0.08;
+        rifle.userData.hasBayonet = true;
+      }
+    });
+    const glint = new THREE.PointLight(0xffffff, 120, 30);
+    glint.position.set(0, 2.5, 0.5);
+    scene.add(glint);
+    setTimeout(() => scene.remove(glint), 250);
+
+  } else if (orderId === 'negotiate') {
+    gameState.negotiated = true;
+    gameState.crowdPressure = Math.max(0, gameState.crowdPressure - 6);
+    gameState.legionMorale = Math.max(0, gameState.legionMorale - 12);
+    addLog('The Marshal opens a channel. A student steps forward.');
+    const speaker = protesters
+      .filter(p => p.visible)
+      .sort((a, b) => a.position.z - b.position.z)[0];
+    if (speaker) {
+      const startZ = speaker.position.z;
+      const endZ = startZ + 8;
+      const startX = speaker.position.x;
+      const endX = startX * 0.3;
+      let t = 0;
+      const walk = () => {
+        t++;
+        if (t > 90) return;
+        speaker.position.z = startZ + (endZ - startZ) * (t / 90);
+        speaker.position.x = startX + (endX - startX) * (t / 90);
+        requestAnimationFrame(walk);
+      };
+      walk();
+    }
+    const meetLight = new THREE.PointLight(0xffeeaa, 60, 15);
+    meetLight.position.set(0, 2, -6);
+    scene.add(meetLight);
+    setTimeout(() => scene.remove(meetLight), 1800);
+
+  } else if (orderId === 'live_fire_warning') {
+    gameState.liveFireWarningUsed = true;
+    gameState.warningShotFired = true;
+    gameState.crowdPressure += 22;
+    gameState.legionMorale = Math.max(0, gameState.legionMorale - 18);
+    gameState.legionCohesion = Math.max(0, gameState.legionCohesion - 12);
+    addLog('Live-fire warning! Rounds crack past the front rank.');
+    soldiers.forEach((s, i) => {
+      if (i % 2 === 0) {
+        const flash = new THREE.PointLight(0xff6600, 400, 18);
+        flash.position.copy(s.position);
+        flash.position.y += 1.6;
+        flash.position.z -= 2;
+        scene.add(flash);
+        setTimeout(() => scene.remove(flash), 120);
+      }
+    });
+    const tracerGeo = new THREE.BufferGeometry().setFromPoints([
+      new THREE.Vector3(-20, 2.6, -2),
+      new THREE.Vector3(-20, 2.6, -22)
+    ]);
+    const tracerMat = new THREE.LineBasicMaterial({ color: 0xffaa33, transparent: true, opacity: 0.95 });
+    const tracer = new THREE.Line(tracerGeo, tracerMat);
+    scene.add(tracer);
+    let tracerFade = 0;
+    const fadeTracer = () => {
+      tracerFade++;
+      tracerMat.opacity = Math.max(0, 0.95 - tracerFade * 0.08);
+      if (tracerFade < 15) requestAnimationFrame(fadeTracer);
+      else scene.remove(tracer);
+    };
+    fadeTracer();
+
+  // ============================================================
+  // NEW: SOUND TRUCK + RADIO ORDERS
+  // ============================================================
+  } else if (orderId === 'address_nation') {
+    if (gameState.radioUsed) {
+      addLog('The station won\'t give the Marshal another slot.');
+    } else {
+      gameState.radioUsed = true;
+      radioBulb.intensity = 300;
+      setTimeout(() => { radioBulb.intensity = 0; }, 600);
+      if (Math.random() < 0.55) {
+        gameState.crowdPressure = Math.max(0, gameState.crowdPressure - 25);
+        gameState.legionMorale = Math.min(100, gameState.legionMorale + 4);
+        addLog('The Marshal addresses the nation. For a moment, everyone listens.');
+      } else {
+        gameState.crowdPressure += 20;
+        gameState.legionMorale = Math.max(0, gameState.legionMorale - 6);
+        addLog('The address falls flat. The crowd boos the radio.');
+      }
+    }
+
+  } else if (orderId === 'cut_power') {
+    if (gameState.soundTruckSeized) {
+      addLog('The truck is already dark.');
+    } else {
+      gameState.soundTruckSeized = true;
+      gameState.soundTruckPlaying = false;
+      gameState.crowdPressure += 22;
+      gameState.legionCohesion = Math.max(0, gameState.legionCohesion - 12);
+      gameState.legionMorale = Math.max(0, gameState.legionMorale - 8);
+      addLog('Legion men move on the truck. The music dies. The crowd screams.');
+      for (let i = 0; i < 6; i++) {
+        const s = soldiers[i];
+        const startZ = s.position.z;
+        const startX = s.position.x;
+        const targetZ = -25;
+        const targetX = -3 + i * 1.2;
+        let t = 0;
+        const run = () => {
+          t++;
+          if (t > 60) {
+            let b = 0;
+            const back = () => {
+              b++;
+              if (b > 60) return;
+              s.position.z = targetZ + (startZ - targetZ) * (b / 60);
+              s.position.x = targetX + (startX - targetX) * (b / 60);
+              requestAnimationFrame(back);
+            };
+            back();
+            return;
+          }
+          s.position.z = startZ + (targetZ - startZ) * (t / 60);
+          s.position.x = startX + (targetX - startX) * (t / 60);
+          requestAnimationFrame(run);
+        };
+        run();
+      }
+    }
+
+  } else if (orderId === 'turn_it_up') {
+    if (Math.random() < 0.5) {
+      gameState.crowdPressure = Math.max(0, gameState.crowdPressure - 15);
+      gameState.legionMorale = Math.max(0, gameState.legionMorale - 4);
+      addLog('The Marshal takes the loudspeaker. His voice cuts through.');
+      radioBulb.intensity = 200;
+      setTimeout(() => { radioBulb.intensity = 0; }, 500);
+    } else {
+      gameState.crowdPressure += 15;
+      gameState.legionMorale = Math.max(0, gameState.legionMorale - 6);
+      addLog('The crowd drowns him out. The anthem plays louder.');
+    }
+
+  // ============================================================
+  // ORIGINAL FIRE OPTIONS
+  // ============================================================
+  } else if (orderId === 'fire_warning') {
+    gameState.warningShotFired = true;
+    gameState.crowdPressure += 20;
+    gameState.legionMorale = Math.max(0, gameState.legionMorale - 12);
+    gameState.legionCohesion = Math.max(0, gameState.legionCohesion - 8);
+    addLog('Warning shots ring out!');
+    soldiers.forEach((s, i) => {
+      if (i % 3 === 0) {
+        const flash = new THREE.PointLight(0xffaa00, 200, 12);
+        flash.position.copy(s.position);
+        flash.position.y += 1.5;
+        flash.position.z -= 1;
+        scene.add(flash);
+        setTimeout(() => scene.remove(flash), 100);
+      }
+    });
+  } else if (orderId === 'fire_crowd') {
+    gameState.phase = 'resolved';
+    scene.background.setHex(0x330000);
+    protesters.forEach(p => p.visible = false);
+    addLog('The Legion fires into the crowd. Casualties reported.');
+    setTimeout(() => endScene('fired_on_crowd'), 1500);
+    return;
+  }
+
+  if (gameState.crowdPressure >= 85) {
+    gameState.phase = 'resolved';
+    addLog('SURGE! The crowd breaks through!');
+    setTimeout(() => endScene('surge'), 1500);
+    return;
+  }
+  if (gameState.legionCohesion <= 15) {
+    gameState.phase = 'resolved';
+    addLog('The Legion disbands.');
+    setTimeout(() => endScene('peaceful'), 1500);
+    return;
+  }
+
+  gameState.beat++;
+  if (gameState.beat > gameState.maxBeats) {
+    gameState.phase = 'resolved';
+    setTimeout(() => endScene('peaceful'), 1500);
+    return;
+  }
+
+  clampSoldiers();   // <<< safety net — every order respects this
+  gameState.crowdPressure = Math.min(84, gameState.crowdPressure + 1);
+  updateUI();
+};
+
+// --- END SCENE ---
+function endScene(outcome) {
+  const result = {
+    type: 'KING_RESULT',
+    outcome: outcome,
+    beats: gameState.beat,
+    injuries: outcome === 'fired_on_crowd'
+      ? Math.floor(3 + Math.random() * 8)
+      : (gameState.injuries || 0),
+    warningShotFired: gameState.warningShotFired,
+    liveFireWarningUsed: gameState.liveFireWarningUsed || false,
+    tearGasUsed: gameState.tearGasUsed || 0,
+    waterCannonUsed: gameState.waterCannonUsed || 0,
+    batonChargeUsed: gameState.batonChargeUsed || 0,
+    arrestAttempts: gameState.arrestAttempts || 0,
+    arrestedLeaders: gameState.arrestedLeaders || 0,
+    negotiated: gameState.negotiated || false,
+    bayonetsFixed: gameState.bayonetsFixed || false,
+    soundTruckSeized: gameState.soundTruckSeized || false,
+    radioUsed: gameState.radioUsed || false,
+    legionLoyalty: 90,
+    legionMorale: gameState.legionMorale,
+    legionCohesion: gameState.legionCohesion,
+    crowdPressure: gameState.crowdPressure,
+    legionSize: soldiers.length
+  };
+  window.parent.postMessage(result, '*');
+}
+
+updateUI();
+addLog('The Legion forms up on the asphalt.');
+animate();
+
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
+</script>
+</body>
+</html>

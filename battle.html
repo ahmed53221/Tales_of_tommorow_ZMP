@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Battle - Class Council</title>
+  <link rel="stylesheet" type="text/css" href="battle.css">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <div id="battle-container">
+    <audio id="battle-music" loop preload="auto" style="display:none;">
+      <source src="js/ji.mp3" type="audio/mpeg">
+    </audio>
+    <div id="canvas-container" style="position:absolute;inset:0;">
+      <canvas id="battle-map-canvas"></canvas>
+    </div>
+  </div>
+
+  <!-- Game modules in dependency order -->
+  <script src="js/data.js"></script>
+  <script src="js/engine.js"></script>
+  <script src="js/battle.js"></script>         <!-- File 1: BattleMap -->
+  <script src="js/battlefeild.js"></script>    <!-- File 2: BattleUnits -->
+  <script src="js/battle_front.js"></script>   <!-- File 3: BattleFront -->
+  <script src="js/battla.js"></script>         <!-- File 4: BattleHOI4 -->
+  <script src="js/battle_economy.js"></script>
+  <script src="js/battle_terrain_visual.js"></script>
+  <script src="js/drone.js"></script>
+  <script src="js/hud.js"></script>
+  
+
+  <script>
+    window.addEventListener('load', function () {
+      // Sanity check
+      if (!window.BattleMap || !window.BattleUnits || !window.BattleFront || !window.BattleHOI4) {
+        var missing = [];
+        if (!window.BattleMap) missing.push('battle_map.js (js/battle.js)');
+        if (!window.BattleUnits) missing.push('battle_units.js (js/battlefeild.js)');
+        if (!window.BattleFront) missing.push('battle_front.js');
+        if (!window.BattleHOI4) missing.push('battle_hoi4.js (js/battla.js)');
+        document.body.innerHTML =
+          '<div style="padding:40px;color:#f66;font-family:monospace;">' +
+          '<h1>Missing scripts:</h1><p>' + missing.join('<br>') + '</p></div>';
+        return;
+      }
+
+      // Read paramilitary strength out of the saved game
+      var playerStrength = 100, enemyStrength = 120;
+      try {
+        var raw = localStorage.getItem('classCouncil_save_auto');
+        if (raw) {
+          var saveData = JSON.parse(raw);
+          if (saveData && saveData.state && saveData.state.paramilitaries) {
+            var p = saveData.state.paramilitaries;
+            if (p.dzehurjaca) {
+              playerStrength = Math.max(60, Math.round(
+                p.dzehurjaca.members * ((p.dzehurjaca.training + p.dzehurjaca.equipment) / 20)
+              ));
+            }
+            if (p.black_legion) {
+              enemyStrength = Math.max(80, Math.round(
+                p.black_legion.members * ((p.black_legion.training + p.black_legion.equipment) / 20)
+              ));
+            }
+          }
+        }
+      } catch (e) {}
+
+      // Boot in order
+    BattleMap.init({});
+    BattleUnits.init({ playerStrength: playerStrength, enemyStrength: enemyStrength });
+    BattleFront.init();
+    BattleHOI4.init();
+    BattleHOI4.attachClickHandler();
+    BattleEconomy.init();
+    BattleTerrainVisual.init();
+    window.BattleDrones.init();
+    window.BattleHUD.init();
+      
+
+      console.log('[battle.html] all modules booted.');
+    });
+  </script>
+</body>
+</html>

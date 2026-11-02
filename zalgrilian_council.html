@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>The Zalgrilian Council</title>
+<style>
+  html, body {
+    margin: 0; padding: 0; height: 100%; overflow: hidden;
+    background: #0a0a0e;
+    font-family: 'JetBrains Mono', 'Consolas', monospace;
+    color: #d8e8f0;
+  }
+
+  #council-root {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    grid-template-rows: 48px 1fr 140px;
+    grid-template-areas:
+      "top    top"
+      "main   side"
+      "log    log";
+    width: 100vw; height: 100vh;
+  }
+
+  /* ---------- Top Bar ---------- */
+  #top {
+    grid-area: top;
+    background: linear-gradient(180deg, #14181f 0%, #0e1218 100%);
+    border-bottom: 1px solid #2a3545;
+    display: flex; align-items: center;
+    padding: 0 18px; gap: 22px;
+    font-size: 13px; letter-spacing: 0.5px;
+  }
+  #top .title {
+    font-weight: 700;
+    color: #7fdcff;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 12px;
+  }
+  #top .sep { color: rgba(90,200,255,0.15); }
+  #top .stat { display: flex; gap: 6px; align-items: baseline; }
+  #top .lbl {
+    font-size: 10px; color: rgba(140,190,220,0.55);
+    text-transform: uppercase; letter-spacing: 1.5px;
+  }
+  #top .val { font-weight: 700; color: #e0f0ff; font-size: 14px; }
+  #top .val.phase-campaign { color: #7fdf7f; }
+  #top .val.phase-convention { color: #ffcc55; }
+  #top .val.phase-ended { color: #ff6060; }
+
+  /* ---------- Main ---------- */
+  #main {
+    grid-area: main;
+    overflow-y: auto;
+    padding: 18px 22px;
+  }
+
+  /* ---------- Sidebar ---------- */
+  #side {
+    grid-area: side;
+    background: #0e1218;
+    border-left: 1px solid #2a3545;
+    overflow-y: auto;
+    padding: 14px 16px;
+  }
+
+  /* ---------- Log ---------- */
+  #log {
+    grid-area: log;
+    background: #080b10;
+    border-top: 1px solid #2a3545;
+    overflow-y: auto;
+    padding: 10px 18px;
+    font-size: 11px;
+    line-height: 1.6;
+    color: rgba(180,210,230,0.7);
+  }
+  #log .entry { border-bottom: 1px solid rgba(90,200,255,0.05); padding: 2px 0; }
+  #log .entry.new { color: #7fdcff; }
+
+  /* ---------- Cards / Panels ---------- */
+  .panel {
+    background: linear-gradient(180deg, #12161d 0%, #0c1015 100%);
+    border: 1px solid #2a3545;
+    border-radius: 3px;
+    padding: 14px 18px;
+    margin-bottom: 14px;
+  }
+  .panel h2 {
+    margin: 0 0 10px 0;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #7fdcff;
+    font-weight: 600;
+  }
+  .panel h3 {
+    margin: 12px 0 6px 0;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: rgba(140,190,220,0.65);
+    font-weight: 600;
+  }
+
+  /* ---------- Party bars ---------- */
+  .party-row {
+    display: grid;
+    grid-template-columns: 90px 1fr 60px 50px;
+    align-items: center;
+    gap: 10px;
+    padding: 5px 0;
+    font-size: 12px;
+  }
+  .party-row .nm { font-weight: 700; letter-spacing: 0.5px; }
+  .party-row .bar {
+    height: 8px;
+    background: rgba(0,0,0,0.55);
+    border-radius: 2px;
+    overflow: hidden;
+    position: relative;
+  }
+  .party-row .bar i {
+    display: block; height: 100%;
+    transition: width 0.4s ease;
+  }
+  .party-row .pct { text-align: right; font-weight: 700; }
+  .party-row .seat {
+    text-align: right; font-size: 11px;
+    color: rgba(140,190,220,0.7);
+  }
+  .party-row.zmp .nm { color: #7fdf7f; }
+  .party-row.zpf .nm { color: #66c466; }
+  .party-row.zap .nm { color: #e0a060; }
+  .party-row.rbmp .nm { color: #ff7070; }
+  .party-row.zej .nm { color: #d060d0; }
+  .party-row.plms .nm { color: #e880b8; }
+
+  /* ---------- Buttons ---------- */
+  button.act {
+    display: block;
+    width: 100%;
+    margin: 6px 0;
+    padding: 10px 12px;
+    background: linear-gradient(180deg, #1a2028 0%, #121820 100%);
+    color: #d8e8f0;
+    border: 1px solid #2a3545;
+    border-radius: 3px;
+    font-family: inherit;
+    font-size: 12px;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.12s ease;
+  }
+  button.act:hover:not(:disabled) {
+    background: linear-gradient(180deg, #202a36 0%, #161c26 100%);
+    border-color: #4a7a9a;
+    transform: translateX(2px);
+  }
+  button.act:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+  button.act b { color: #e0f0ff; }
+  button.act .cost {
+    float: right;
+    color: #7fdcff;
+    font-size: 11px;
+    font-weight: 600;
+  }
+  button.act .d {
+    display: block;
+    font-size: 10px;
+    color: rgba(140,190,220,0.55);
+    margin-top: 3px;
+  }
+  button.act.primary {
+    background: linear-gradient(180deg, #1a3520 0%, #0e2014 100%);
+    border-color: #4a7a4a;
+  }
+  button.act.primary:hover:not(:disabled) {
+    background: linear-gradient(180deg, #244a2a 0%, #142a18 100%);
+    border-color: #6aaa6a;
+  }
+  button.act.danger {
+    background: linear-gradient(180deg, #35201a 0%, #200e0c 100%);
+    border-color: #7a4a4a;
+  }
+  button.act.danger:hover:not(:disabled) {
+    background: linear-gradient(180deg, #4a2a24 0%, #2a1414 100%);
+    border-color: #aa6a6a;
+  }
+
+  /* ---------- Action grid ---------- */
+  .action-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+  }
+
+  /* ---------- Convention clauses ---------- */
+  .clause-opt {
+    display: block;
+    width: 100%;
+    margin: 6px 0;
+    padding: 12px 14px;
+    background: linear-gradient(180deg, #1a2028 0%, #121820 100%);
+    border: 1px solid #2a3545;
+    border-radius: 3px;
+    font-family: inherit;
+    font-size: 12px;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.12s ease;
+  }
+  .clause-opt:hover {
+    border-color: #7fdcff;
+    background: linear-gradient(180deg, #202a36 0%, #161c26 100%);
+  }
+  .clause-opt b {
+    color: #7fdcff;
+    display: block;
+    font-size: 12px;
+    letter-spacing: 0.5px;
+  }
+  .clause-opt .d {
+    display: block;
+    color: rgba(180,210,230,0.7);
+    font-size: 11px;
+    margin-top: 4px;
+    line-height: 1.4;
+  }
+  .clause-opt .eff {
+    display: block;
+    color: rgba(140,220,140,0.7);
+    font-size: 10px;
+    margin-top: 6px;
+    font-style: italic;
+  }
+
+  /* ---------- Election result overlay ---------- */
+  #election-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.85);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+  }
+  #election-overlay.visible { display: flex; }
+  #election-overlay .box {
+    background: linear-gradient(180deg, #141820 0%, #0c1015 100%);
+    border: 2px solid #7fdcff;
+    border-radius: 6px;
+    padding: 30px 40px;
+    max-width: 640px;
+    width: 90%;
+    max-height: 85vh;
+    overflow-y: auto;
+  }
+  #election-overlay h1 {
+    margin: 0 0 6px 0;
+    font-size: 22px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #7fdcff;
+    text-align: center;
+  }
+  #election-overlay .sub {
+    text-align: center;
+    color: rgba(140,190,220,0.7);
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+  #election-overlay .zmp-line {
+    text-align: center;
+    font-size: 30px;
+    font-weight: 700;
+    color: #7fdf7f;
+    margin: 16px 0;
+    letter-spacing: 2px;
+  }
+  #election-overlay .hist {
+    text-align: center;
+    font-size: 12px;
+    color: rgba(180,210,230,0.65);
+    margin-bottom: 24px;
+  }
+  #election-overlay table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+    margin-bottom: 20px;
+  }
+  #election-overlay th {
+    text-align: left;
+    padding: 6px 8px;
+    color: rgba(140,190,220,0.6);
+    text-transform: uppercase;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    border-bottom: 1px solid #2a3545;
+  }
+  #election-overlay td {
+    padding: 5px 8px;
+    border-bottom: 1px solid rgba(90,200,255,0.05);
+  }
+
+  #event-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.85);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+#event-overlay.visible { display: flex; }
+#event-overlay .box {
+  background: linear-gradient(180deg, #141820 0%, #0c1015 100%);
+  border: 2px solid #ffcc55;
+  border-radius: 6px;
+  padding: 30px 40px;
+  max-width: 640px;
+  width: 90%;
+  max-height: 85vh;
+  overflow-y: auto;
+}
+#event-overlay h1 {
+  margin: 0 0 6px 0;
+  font-size: 20px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #ffcc55;
+  text-align: center;
+}
+#event-overlay .sub {
+  text-align: center;
+  color: rgba(140,190,220,0.7);
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+.party-row.in-coalition {
+  background: rgba(127, 220, 255, 0.06);
+}
+.party-row.in-coalition .nm {
+  color: #7fdcff;
+}
+  #election-overlay .winner { font-weight: 700; color: #7fdf7f; }
+  #election-overlay .contin {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    background: #1a3520;
+    color: #d8e8f0;
+    border: 1px solid #4a7a4a;
+    border-radius: 3px;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+  #election-overlay .contin:hover {
+    background: #244a2a;
+  }
+    /* ============================================================
+     ANIMATIONS — Wire Reports & Terminal Flicker
+     ============================================================ */
+
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  @keyframes slide-up {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes wire-print {
+    0%   { transform: scaleY(0); opacity: 0; transform-origin: top; }
+    50%  { transform: scaleY(1.02); opacity: 1; }
+    100% { transform: scaleY(1); opacity: 1; }
+  }
+
+  @keyframes flicker {
+    0%, 100% { opacity: 1; }
+    5%  { opacity: 0.8; }
+    10% { opacity: 1; }
+    33% { opacity: 0.9; }
+    35% { opacity: 1; }
+  }
+
+  @keyframes pulse-danger {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(204, 34, 34, 0); }
+    50%      { box-shadow: 0 0 15px 2px rgba(204, 34, 34, 0.3); border-color: #cc2222; }
+  }
+
+  /* Apply slide-up to all main panels automatically */
+  .panel {
+    animation: slide-up 0.3s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  }
+
+  /* Stagger the party rows in the sidebar */
+  .party-row {
+    animation: slide-up 0.4s ease-out both;
+  }
+  .party-row:nth-child(1) { animation-delay: 0.05s; }
+  .party-row:nth-child(2) { animation-delay: 0.10s; }
+  .party-row:nth-child(3) { animation-delay: 0.15s; }
+  .party-row:nth-child(4) { animation-delay: 0.20s; }
+  .party-row:nth-child(5) { animation-delay: 0.25s; }
+  .party-row:nth-child(6) { animation-delay: 0.30s; }
+
+  /* Overlays come in like a wire print */
+  #election-overlay .box,
+  #event-overlay .box {
+    animation: wire-print 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  }
+
+  /* Headlines flicker in */
+  #election-overlay h1,
+  #event-overlay h1 {
+    animation: flicker 1.2s steps(2, end) 1, fade-in 0.5s ease-out both;
+  }
+
+  /* The election table rows cascade in */
+  #el-body tr {
+    animation: fade-in 0.3s ease-out both;
+  }
+  #el-body tr:nth-child(1) { animation-delay: 0.1s; }
+  #el-body tr:nth-child(2) { animation-delay: 0.2s; }
+  #el-body tr:nth-child(3) { animation-delay: 0.3s; }
+  #el-body tr:nth-child(4) { animation-delay: 0.4s; }
+  #el-body tr:nth-child(5) { animation-delay: 0.5s; }
+  #el-body tr:nth-child(6) { animation-delay: 0.6s; }
+
+  /* Crisis pulse for danger */
+  .crisis-pulse {
+    animation: pulse-danger 2.5s infinite;
+  }
+
+  /* Clauses fade in smoothly */
+  .clause-opt {
+    animation: slide-up 0.4s ease-out both;
+  }
+  .clause-opt:nth-child(2) { animation-delay: 0.1s; }
+  .clause-opt:nth-child(3) { animation-delay: 0.2s; }
+  .clause-opt:nth-child(4) { animation-delay: 0.3s; }
+</style>
+</head>
+<body>
+
+<div id="council-root">
+
+  <!-- ================= TOP BAR ================= -->
+  <div id="top">
+    <span class="title">The Zalgrilian Council</span>
+    <span class="sep">│</span>
+    <span class="stat"><span class="lbl">Week</span><span class="val" id="top-week">1</span><span class="lbl" style="margin-left:2px;">/ 20</span></span>
+    <span class="sep">│</span>
+    <span class="stat"><span class="lbl">Phase</span><span class="val" id="top-phase">Campaign</span></span>
+    <span class="sep">│</span>
+    <span class="stat"><span class="lbl">AP</span><span class="val" id="top-ap">3</span></span>
+    <span class="sep">│</span>
+    <span class="stat"><span class="lbl">Funds</span><span class="val" id="top-funds">80</span></span>
+    <span class="sep">│</span>
+    <span class="stat"><span class="lbl">Volunteers</span><span class="val" id="top-vol">12</span></span>
+    <span class="sep">│</span>
+    <span class="stat"><span class="lbl">Unity</span><span class="val" id="top-unity">60</span></span>
+    <span class="sep">│</span>
+    <span class="stat"><span class="lbl">Chaos</span><span class="val" id="top-chaos" style="color:#cc0000;">65</span></span>
+  </div>
+
+  <!-- ================= MAIN ================= -->
+  <div id="main"></div>
+
+  <!-- ================= SIDEBAR ================= -->
+  <div id="side">
+    <div class="panel">
+      <h2>Standings</h2>
+      <div id="standings"></div>
+    </div>
+
+    <div class="panel">
+      <h2>Session</h2>
+      <button class="act primary" id="btn-advance">
+        <b>Advance Week →</b>
+        <span class="d">Move to the next week</span>
+      </button>
+      <div id="session-info" style="font-size:11px;color:rgba(140,190,220,0.6);margin-top:8px;"></div>
+    </div>
+  </div>
+
+  <!-- ================= LOG ================= -->
+  <div id="log"></div>
+
+</div>
+
+<!-- ================= ELECTION OVERLAY ================= -->
+<div id="election-overlay">
+  <div class="box">
+    <h1 id="el-title">Election Held</h1>
+    <div class="sub" id="el-sub">Zalgrilian Council — Week 1</div>
+    <div class="zmp-line" id="el-zmp">55%</div>
+    <div class="hist" id="el-hist"></div>
+    <table>
+      <thead>
+        <tr><th>Party</th><th>Share</th><th>Seats</th></tr>
+      </thead>
+      <tbody id="el-body"></tbody>
+    </table>
+    <button class="contin" id="el-continue">Continue</button>
+  </div>
+
+</div>
+
+<!-- ================= EVENT OVERLAY ================= -->
+<div id="event-overlay">
+  <div class="box">
+    <h1 id="ev-title">Event</h1>
+    <div class="sub" id="ev-sub">A moment in the session</div>
+    <p id="ev-body" style="font-size:13px;color:#d8e8f0;line-height:1.6;margin-bottom:18px;"></p>
+    <div id="ev-choices"></div>
+  </div>
+</div>
+
+<!-- ================= SCRIPT ================= -->
+<script src="js/Zalgrilian_council.js"></script>
+<script src="js/Uij.js"></script>
+</body>
+</html>

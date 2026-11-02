@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Class Council — Multiplayer</title>
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <link rel="stylesheet" type="text/css" href="mp_skin.css">
+</head>
+<body>
+  <div class="background-pattern"></div>
+
+  <div id="shell">
+    <header id="top">
+      <h1>🎓 Class Council</h1>
+      <span class="byline">Multiplayer</span>
+      <nav>
+        <button onclick="UIMP._goLobby()">🏠 Lobby</button>
+        <button onclick="UIMP._goSinglePlayer()">🎮 Single Player</button>
+        <button onclick="UIMP._showBriefing()">📖 Briefing</button>
+        <button onclick="UIMP._showAchievements()">🏆 Achievements</button>
+        <span id="conn-pill" class="conn-pill off">
+          <span class="dot"></span>
+          <span class="label">Disconnected</span>
+        </span>
+        <span id="ready-pill" class="ready-pill" style="display:none;">Waiting…</span>
+      </nav>
+    </header>
+
+    <div id="cols">
+      <div class="panel" id="left-panel">
+        <h2> Status</h2>
+        <div id="status"></div>
+        <hr class="rule">
+        <h2>📜 Log</h2>
+        <div id="log"></div>
+      </div>
+
+      <div class="panel" id="main-panel">
+        <div id="main"></div>
+      </div>
+
+      <div class="panel" id="right-panel">
+        <div class="tabs">
+          <button id="tab-poll"      class="on" onclick="UIMP._setTab('poll')">Poll</button>
+          <button id="tab-seats"     onclick="UIMP._setTab('seats')">🪑 Seats</button>
+          <button id="tab-hist"      onclick="UIMP._setTab('hist')">📈 Trend</button>
+          <button id="tab-congress"  onclick="UIMP._setTab('congress')">🏛️ Congress</button>
+          <button id="tab-ambitions" onclick="UIMP._setTab('ambitions')">🎯 Ambitions</button>
+          <button id="tab-news"      onclick="UIMP._setTab('news')">📰 News</button>
+          <button id="tab-cells"     onclick="UIMP._setTab('cells')">🗺️ Hunt Cells</button>
+          <button id="tab-cabinet"   onclick="UIMP._setTab('cabinet')">💼 Cabinet</button>
+        </div>
+        <div id="right-body"></div>
+      </div>
+    </div>
+
+    <div id="toast" class="toast"></div>
+  </div>
+
+  <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+
+  <script src="js/data.js"></script>
+  <script src="js/events.js"></script>
+  <script src="js/hover.js"></script>
+
+  
+
+  <script src="js/engine_mp.js"></script>
+  <script src="js/multiplayer.js"></script>
+
+  <script src="flags.js"></script>
+
+  <script src="factions/zmp.js"></script>
+  <script src="factions/bl.js"></script>
+  <script src="factions/zpf.js"></script>
+  <script src="factions/iia.js"></script>
+  <script src="factions/red.js"></script>
+  <script src="factions/pl.js"></script>
+  <script src="factions/minor.js"></script>
+
+  <script src="js/ui_mp.js"></script>
+
+</body>
+</html>

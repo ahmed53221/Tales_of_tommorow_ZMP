@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Class Council — A Coalition Simulator</title>
+  <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+  <!-- Background pattern overlay -->
+  <div class="background-pattern"></div>
+
+  <div id="shell">
+    <header id="top">
+      <h1>Class Council</h1>
+      <span class="byline">A Coalition Simulator</span>
+      <nav>
+        <button onclick="UI.go('title')">Home</button>
+        <button class="nav-save" onclick="UI.saveGame('slot1')">Save</button>
+        <button class="nav-load" onclick="UI.loadGame('slot1')">Load</button>
+        <button onclick="UI.showBriefing()">Briefing</button>
+        <button onclick="UI.go('achievements')">Achievements</button>
+        <button id="theme-toggle" onclick="toggleTheme()">Dark Mode</button>
+      </nav>
+    </header>
+
+    <div id="cols">
+      <!-- LEFT PANEL: Status & Log -->
+      <div class="panel" id="left-panel">
+        <h2> Status</h2>
+        <div id="status"></div>
+        <hr class="rule">
+        <h2> Log</h2>
+        <div id="log"></div>
+      </div>
+
+      <!-- CENTER PANEL: Main Content -->
+      <div class="panel" id="main-panel">
+        <div id="main"></div>
+      </div>
+
+      <!-- RIGHT PANEL: Polls & Visualizations -->
+      <div class="panel" id="right-panel">
+        <div class="tabs">
+          <button id="tab-poll" class="on" onclick="UI.setTab('poll')">Poll</button>
+          <button id="tab-seats" onclick="UI.setTab('seats')"> Seats</button>
+          <button id="tab-hist" onclick="UI.setTab('hist')"> Trend</button>
+          <button id="tab-congress" onclick="UI.setTab('congress')"> Congress</button>
+          <button id="tab-ambitions" onclick="UI.setTab('ambitions')"> Ambitions</button>
+          <button id="tab-news" onclick="UI.setTab('news')"> News</button>
+          <button id="tab-cells" onclick="UI.setTab('cells')"> Hunt Cells</button>
+        </div>
+        <div id="right-body"></div>
+      </div>
+    </div>
+
+    
+
+    <div id="toast" class="toast"></div>
+
+
+  </div>
+
+    <script>
+    // Theme Toggle Logic
+    function toggleTheme() {
+      const isDark = document.body.getAttribute('data-theme') === 'dark';
+      document.body.setAttribute('data-theme', isDark ? 'light' : 'dark');
+      
+      // Update the button text
+      const btn = document.getElementById('theme-toggle');
+      btn.textContent = isDark ? 'Dark Mode' : 'Light Mode';
+    }
+
+    
+    document.addEventListener('DOMContentLoaded', () => {
+      if (localStorage.getItem('theme') === 'dark') {
+        document.body.setAttribute('data-theme', 'dark');
+        document.getElementById('theme-toggle').textContent = 'Light Mode';
+      }
+    });
+
+    
+    function toggleTheme() {
+      const isDark = document.body.getAttribute('data-theme') === 'dark';
+      const newTheme = isDark ? 'light' : 'dark';
+      document.body.setAttribute('data-theme', newTheme);
+      
+      const btn = document.getElementById('theme-toggle');
+      btn.textContent = isDark ? 'Dark Mode' : 'Light Mode';
+      
+      localStorage.setItem('theme', newTheme);
+    };
+    
+  </script>
+
+  
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script src="https://unpkg.com/d3-parliament@1.0.1/build/d3-parliament.min.js"></script>
+
+
+  <script src="js/images.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/events.js"></script>
+  <script src="js/hover.js"></script>
+  
+  <script src="js/engine.js"></script>
+  <script src="js/civil_war.js"></script>
+  <script src="js/battlefeild.js"></script>
+  <script src="js/jihadist_minigame.js"></script>   
+  <script src="js/kin.js"></script>
+  <script src="js/king.js"></script>
+  <script src="js/securro.js"></script>
+  <script src="js/securr.js"></script>
+  
+  <script src="js/ui.js"></script>
+  <script src="js/zalgrilia.js"></script>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      UI.boot();
+    });
+  </script>
+</body>
+</html>

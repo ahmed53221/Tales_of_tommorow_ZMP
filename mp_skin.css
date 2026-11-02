@@ -1,0 +1,402 @@
+/* ============================================================
+   mp_skin.css — Multiplayer delta
+   Loaded AFTER style.css. Only adds MP-only surfaces.
+   Everything else (top bar, panels, tabs, polls, action grid,
+   log, choices, buttons) is styled by style.css.
+   ============================================================ */
+
+/* ---------- CONNECTION PILL (top bar right edge) ---------- */
+.conn-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  padding: 4px 10px;
+  border: 1px solid var(--border);
+  background: #1c1c1c;
+  margin-left: 6px;
+}
+.conn-pill .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}
+.conn-pill.on  .dot { background: #7fdf7f; box-shadow: 0 0 6px rgba(127,223,127,0.6); }
+.conn-pill.off .dot { background: #ff6060; box-shadow: 0 0 6px rgba(255,96,96,0.6); }
+.conn-pill.off { color: #ff6060; }
+
+/* ---------- READY PILL ---------- */
+.ready-pill {
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  color: #ffcc00;
+  border: 1px solid #5a4a1a;
+  background: rgba(255, 204, 0, 0.06);
+  padding: 4px 10px;
+  margin-left: 6px;
+  animation: readyPulse 1.6s ease-in-out infinite;
+}
+@keyframes readyPulse {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.55; }
+}
+
+/* ---------- LOBBY ----------
+   The lobby reuses the SP shell. It renders inside #main-panel
+   with the same #main container. But when the lobby is active,
+   the left and right panels are hidden by hiding their tabs.
+   We only need to style the inner lobby cards.
+*/
+.lobby {
+  padding: 20px 0;
+}
+
+.lobby-subtitle {
+  text-align: center;
+  color: var(--text-muted);
+  font-family: var(--font-heading);
+  font-style: italic;
+  font-size: 1rem;
+  margin-bottom: 24px;
+}
+
+.lobby-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+@media (max-width: 700px) {
+  .lobby-cards { grid-template-columns: 1fr; }
+}
+
+.lobby-card {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.lobby-card h2 {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: 1.3rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--text-heading);
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 8px;
+  text-align: left;
+}
+
+.lobby-card p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.lobby-label {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-top: 8px;
+}
+
+.lobby-code {
+  display: block;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  padding: 8px 10px;
+  font-family: 'Consolas', 'Courier New', monospace;
+  font-size: 0.8rem;
+  color: #7fdf7f;
+  word-break: break-all;
+}
+
+.lobby-input {
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  padding: 8px 10px;
+  color: var(--text-main);
+  font-family: 'Consolas', 'Courier New', monospace;
+  font-size: 0.8rem;
+  outline: none;
+}
+.lobby-input:focus { border-color: var(--border-light); }
+
+.lobby-waiting {
+  margin-top: 6px;
+  color: #ffcc00;
+  font-size: 0.85rem;
+  text-align: center;
+  animation: readyPulse 1.6s ease-in-out infinite;
+}
+
+.lobby-error {
+  color: #ff6060;
+  font-size: 0.85rem;
+  min-height: 1.4em;
+  text-align: center;
+  margin-top: 14px;
+  font-family: var(--font-body);
+}
+
+.lobby .btn-primary {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  padding: 8px 16px;
+  border: 1px solid var(--border-light);
+  background: #333;
+  color: var(--text-main);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.lobby .btn-primary:hover { background: #444; }
+
+/* ---------- INBOX BANNER (center column, above week content) ---------- */
+.inbox-banner {
+  border: 1px solid #5a4a1a;
+  background: rgba(255, 204, 0, 0.06);
+  padding: 10px 14px;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.inbox-banner .ib-icon { font-size: 1.2rem; }
+.inbox-banner .ib-text {
+  flex: 1;
+  font-family: var(--font-heading);
+  font-size: 0.95rem;
+  color: #ffcc00;
+}
+.inbox-banner .ib-count {
+  background: #cc0000;
+  color: #fff;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.75rem;
+  padding: 2px 8px;
+}
+
+/* ---------- INBOX EVENT (resolved in center column) ---------- */
+.inbox-event {
+  border: 1px solid var(--border);
+  background: rgba(0, 0, 0, 0.2);
+  padding: 14px;
+  margin-bottom: 12px;
+}
+.inbox-event .ie-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 6px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--border);
+}
+.inbox-event .ie-title {
+  font-family: var(--font-heading);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-heading);
+}
+.inbox-event .ie-expiry {
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  color: #ffcc00;
+  border: 1px solid #5a4a1a;
+  padding: 2px 8px;
+  white-space: nowrap;
+}
+.inbox-event .ie-body {
+  color: var(--text-secondary);
+  font-size: 0.92rem;
+  line-height: 1.55;
+  margin-bottom: 10px;
+}
+.inbox-event .ie-choices {
+  border: 1px solid var(--border);
+  margin-bottom: 10px;
+}
+.inbox-event .ie-actions {
+  display: flex;
+  gap: 6px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+}
+.inbox-event .ie-pass,
+.inbox-event .ie-defer {
+  flex: 1;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  padding: 6px 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.inbox-event .ie-pass:hover  { color: #ffcc00; border-color: #5a4a1a; }
+.inbox-event .ie-defer:hover { color: var(--text-main); border-color: var(--border-light); }
+
+/* ---------- CELLS MAP (inside right panel #right-body) ---------- */
+.cell-summary {
+  display: flex;
+  gap: 14px;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  padding: 6px 0;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 10px;
+}
+.cell-summary b { color: var(--text-main); }
+
+.cell-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+
+.cell-tile {
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,0.02);
+  padding: 8px 6px;
+  text-align: center;
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+}
+.cell-tile.cell-discovered {
+  border-color: var(--accent-red);
+  background: rgba(217, 154, 154, 0.08);
+}
+.cell-tile .cell-icon { font-size: 1.4rem; }
+.cell-tile .cell-name {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  color: var(--text-main);
+  font-size: 0.8rem;
+  margin: 3px 0;
+}
+.cell-tile .cell-strength { color: var(--text-muted); }
+.cell-tile .cell-supporters { color: var(--text-muted); font-size: 0.7rem; }
+
+/* BL walls bar */
+.wall-bar {
+  height: 8px;
+  background: #1a1a1a;
+  border: 1px solid var(--border);
+  overflow: hidden;
+  margin: 6px 0;
+}
+.wall-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #a000a0, #ff00ff);
+  transition: width 0.3s;
+}
+.wall-count {
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  color: #ffcc00;
+  text-align: center;
+}
+.prophecy {
+  margin-top: 8px;
+  padding: 8px 10px;
+  background: rgba(160, 0, 160, 0.08);
+  border-left: 3px solid #a000a0;
+  font-family: var(--font-heading);
+  font-style: italic;
+  font-size: 0.85rem;
+  color: #d0a0d0;
+}
+
+/* ---------- OPPONENT / FORCE CARDS (right panel) ---------- */
+.force-card {
+  border: 1px solid var(--border);
+  padding: 8px 10px;
+  margin-bottom: 6px;
+  background: rgba(0,0,0,0.15);
+}
+.force-card .force-name {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--text-main);
+  margin-bottom: 4px;
+}
+.force-card .force-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+.force-card .force-stats b { color: var(--text-main); }
+
+/* ---------- ENDING (already exists in style.css, but we add
+   the faction-color border and reason line) ---------- */
+.ending {
+  border: 2px solid var(--border);
+  padding: 40px 20px;
+  margin: 20px auto;
+  max-width: 720px;
+  text-align: center;
+  background: rgba(0,0,0,0.2);
+}
+.ending .ending-title {
+  font-family: var(--font-heading);
+  font-size: 2.4rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin: 0 0 10px 0;
+}
+.ending .ending-reason {
+  color: var(--text-secondary);
+  font-family: var(--font-heading);
+  font-style: italic;
+  font-size: 1rem;
+  line-height: 1.6;
+  max-width: 560px;
+  margin: 0 auto 12px auto;
+}
+.ending .ending-week,
+.ending .ending-faction {
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin: 0 0 6px 0;
+}
+.ending .btn-primary {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  padding: 8px 16px;
+  border: 1px solid var(--border-light);
+  background: #333;
+  color: var(--text-main);
+  cursor: pointer;
+  margin-top: 16px;
+}
+.ending .btn-primary:hover { background: #444; }
+
+/* Wrap tabs so the 8th (Cabinet) isn't clipped off the panel edge. */
+#right-panel .tabs {
+  display: flex;
+  flex-wrap: wrap;
+}
+#right-panel .tabs button {
+  flex: 0 0 auto;
+  margin: 1px;
+}
