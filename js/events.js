@@ -226,7 +226,7 @@
      * WEEK 5 — Red Walkout (COMMIT or NOT)
      * ============================================================ */
     {
-      id: 'week5_red_protests', week: 5, handler: 'any',
+      id: 'red_walkers', week: 5, handler: 'any',
       title: 'The Red Walkout',
       body: 'The Red Front has called a walkout in the eastern districts where their support is highest. Half the students in three wings have not come to school. The faculty senate is meeting. The council is sitting. Everyone is waiting to see whether the ZMP joins the walkout or lets it burn out.',
       choices: [
@@ -740,25 +740,25 @@
 },
 
 {
-  id: 'great_debate',
+  id: 'debate_of_sud_west',
   week: 18,
-  title: '🗣️ The Great Debate: Monarchy vs. Republic vs. Fascism',
+  title: ' The Great Debate: Monarchy vs. Republic vs. Fascism',
   body: 'A student debate has erupted. Some argue for a return to the old monarchy (the "Natural Governing" vision). Others want a pure republic. The Black League wants neither - they want dictatorship. The school must choose its path.',
   choices: [
     { 
       text: 'Champion the monarchy. Order, tradition, and stability.',
       note: '+4 spirit, +3 unity. BL +5% (they attack you as "reactionaries").',
-      effects: { greatDebate: 'monarchy' }
+      effects: { debateOfSudWest: 'monarchy' }
     },
     { 
       text: 'Champion the republic. Freedom, democracy, and equality.',
       note: '+4 faculty, +3 ZMP. BL +3% (they attack you as "weak democrats").',
-      effects: { greatDebate: 'republic' }
+      effects: { debateOfSudWest: 'republic' }
     },
     { 
       text: 'Avoid the debate. Focus on governance, not philosophy.',
       note: 'No change. You lose influence on the ideological battlefield.',
-      effects: { greatDebate: 'avoid' }
+      effects: { debateOfSudWest: 'avoid' }
     }
   ]
 },
@@ -903,7 +903,7 @@
       ]
     },
     {
-      id: 'week14_zalian_list',
+      id: 'zalian_list',
       week: 14,
       handler: 'ZMP',
       condition: function(st) {
@@ -985,7 +985,7 @@
       id: 'scandal',
       week: 20,
       title: 'The Locker Room Photo',
-      body: 'A photo is circulating of your treasurer using club funds for a very large pizza order. It was, in fairness, for a club event. It looks terrible.',
+      body: 'A photo is circulating of your treasurer using club funds for a very large pizza order. It was, in fairness a preety stupid idea',
       choices: [
         { text: 'Full transparency: publish every receipt.',
           note: 'Painful now, clean later.',
@@ -1004,16 +1004,16 @@
     {
   id: 'last_dance',
   week: 22,
-  title: '💃 The Last Dance - Victory Lap',
+  title: ' The Last Dance - Victory Lap',
   body: 'The Black League is on the defensive! Having won the Second Battle of Ca\'uf, the ZMP and its allies now have the momentum. The Black League is retreating, but they are not yet broken. Will you pursue them and destroy them completely, or show mercy?',
   choices: [
     { 
-      text: '🌍 Call Wein for help', 
+      text: ' Call Wein for help', 
       note: 'Requires 70+ Wein relations. High chance of victory.',
       effects: { battle4: 'finish_them' }
     },
     { 
-      text: '🕊️ Show mercy', 
+      text: ' Show mercy', 
       note: 'Let them retreat. They may return.',
       effects: { battle4: 'show_mercy' }
     },
@@ -1239,9 +1239,8 @@
           effects: { demo: { gamers: 5, buskids: 3, freshmen: 3, honor: -3 }, faculty: -18, affinity: { bl: 12, zpf: -10 } } }
       ]
     },
-    // ... all your events ...
+    
 
-// Last event
 {
   id: 'election_night',
   week: 104,
@@ -1289,7 +1288,7 @@
 {
   id: 'released_parties_surge',
   week: -1,
-  title: '📈 The Released Surge',
+  title: ' The Released Surge',
   body: 'The parties that broke free from the Black League are on the march! They\'re holding rallies, recruiting your disaffected members, and eating into your support base. Their momentum is unstoppable.',
   choices: [
     { 
@@ -1400,7 +1399,7 @@
 {
   id: 'honor_code_vote',
   week: -1,
-  title: '📜 Honor Code Reform',
+  title: ' Honor Code Reform',
   body: 'A proposal to reform the school honor code is being voted on. The new code would be stricter but more transparent. Republia supports it. The Red Front opposes it.',
   choices: [
     { 
@@ -1518,7 +1517,7 @@
 {
   id: 'semp_spirit_surge',
   week: -1,
-  title: '✨ SEMP Spirit Surge',
+  title: ' SEMP Spirit Surge',
   body: 'The Spirit Front is back with a vengeance! They\'re organizing massive spirit rallies and theme weeks. The freshmen and athletes are captivated by their energy and enthusiasm.',
   choices: [
     { 
@@ -1580,7 +1579,7 @@
 {
   id: 'sportica_challenge',
   week: -1,
-  title: '🏅 Sportica Challenge',
+  title: ' Sportica Challenge',
   body: 'Sportica is making a play for the athletes! They\'re promising better facilities, more funding for sports, and a gym that\'s actually functional. The athletes are abandoning your coalition.',
   choices: [
     { 
@@ -1611,7 +1610,7 @@
 {
   id: 'pl_pep_power',
   week: -1,
-  title: '🎉 PL Pep Power',
+  title: ' PL Pep Power',
   body: 'The Pep League is organizing a massive school spirit campaign! Posters, glitter, rallies, and an unnerving amount of energy. The freshmen and arts students are flocking to their cause.',
   choices: [
     { 
@@ -1642,7 +1641,7 @@
 {
   id: 'rb_lunch_league',
   week: -1,
-  title: '🍽️ Red Bench Lunch League',
+  title: ' Red Bench Lunch League',
   body: 'The Red Bench is organizing a student strike! They\'re demanding free lunches, better cafeteria food, and a student-run kitchen. The bus kids and freshmen are joining the rebellion.',
   choices: [
     { 
@@ -1672,7 +1671,7 @@
 },{
   id: 'presidential_announcement_sdahh',
   week: 10,
-  title: '🗳️ Presidential Election Campaigning',
+  title: ' Presidential Election Campaigning',
   body: 'It\'s campaign season. The school will elect a new Student Body President in 6 weeks! Candidates are emerging from all parties. The ZMP must decide who to support.',
   choices: [
     { 
@@ -1783,7 +1782,7 @@
 },// ==================== LOCAL CLASSROOM ELECTIONS ====================
 
 {
-  id: 'local_elections_announcement',
+  id: 'local_elections',
   week: 3,
   title: ' Local Classroom Elections Announced!',
   body: 'The classroom elections are being held across the school! Each classroom will elect representatives to the Student Council. This is where grassroots support is built. Your performance here will affect your national standing.',

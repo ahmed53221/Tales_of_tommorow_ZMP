@@ -2630,7 +2630,7 @@ function rotateAdvisorMP(S, factionId, postId, newAdvisorId) {
 
     // Misc
     if (eff.LocalElection)          notes = notes.concat(resolveLocalElection(st, eff.LocalElection, rng));
-    if (eff.greatDebate)            notes = notes.concat(resolveGreatDebate(st, eff.greatDebate, rng));
+    if (eff.debateOfSudWest)            notes = notes.concat(resolvedebateOfSudWest(st, eff.debateOfSudWest, rng));
     if (eff.intellectualResistance) notes = notes.concat(resolveIntellectualResistance(st, eff.intellectualResistance, rng));
     if (eff.allianceDemocracies)    notes = notes.concat(resolveAllianceDemocracies(st, eff.allianceDemocracies, rng));
     if (eff.fallOfCenter)           notes = notes.concat(resolveFallOfCenter(st, eff.fallOfCenter, rng));
@@ -3214,7 +3214,7 @@ function rotateAdvisorMP(S, factionId, postId, newAdvisorId) {
     return notes;
   }
 
-  function resolveGreatDebate(st, choice, rng) {
+  function resolvedebateOfSudWest(st, choice, rng) {
     var notes = [];
     if (choice === 'monarchy') {
       st.spirit = clamp(st.spirit + 1, 0, 10);
