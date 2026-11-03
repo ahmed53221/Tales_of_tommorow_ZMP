@@ -7646,7 +7646,7 @@ function initRelations(st) {
     var bodies = {
       1: 'And when <span class="party-zmp">tyrants</span> broke first wall <span class="text-tricolor">three</span> white horses came charging down the valley.',
       2: 'And when <span class="party-zmp">tyrants</span> broke the second wall for the <span class="party-zmp"> first horse rode forward and <span class="party-rb"> hell followed with him.',
-      3: 'And when <span class="party-zmp">tyrants</span> broke the third wall, the Cultists smiled as they were dragged away. They know the <span class="party-zmp">tyrants</span> do not understand what they are doing.',
+      3: 'And when <span class="party-zmp">tyrants</span> broke the third wall, the violence then came from the east for <span class="party-red">the second horse</span> stepped forward and one of <span class="party-bl">us </span> knew your sin is wrath.',
       4: 'And when <span class="party-zmp">tyrants</span> broke the fourth wall, the halls grew quiet. The <span class="text-tricolor">three</span> colors still thought this was a game of elections and polls.',
       5: 'And when <span class="party-zmp">tyrants</span> broke the fifth wall, the Cultists stopped resisting. They are merely watching the <span class="party-zmp">tyrants</span> now.',
       6: 'And when <span class="party-zmp">tyrants</span> broke the sixth wall, the white horses became visible to the naked eye, charging through the empty corridors at night.',
