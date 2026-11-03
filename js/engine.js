@@ -7644,16 +7644,16 @@ function initRelations(st) {
     };
 
     var bodies = {
-      1: 'And when <span class="text-zmp-green">tyrants</span> broke first wall <span class="text-tricolor">three</span> white horses came charging down the valley.',
-      2: 'And when <span class="text-zmp-green">tyrants</span> broke the second wall, the white horses rode again. The faculty begin to feel a chill in the air.',
-      3: 'And when <span class="text-zmp-green">tyrants</span> broke the third wall, the Cultists smiled as they were dragged away. They know the <span class="text-zmp-green">tyrants</span> do not understand what they are doing.',
-      4: 'And when <span class="text-zmp-green">tyrants</span> broke the fourth wall, the halls grew quiet. The <span class="text-tricolor">three</span> colors still thought this was a game of elections and polls.',
-      5: 'And when <span class="text-zmp-green">tyrants</span> broke the fifth wall, the Cultists stopped resisting. They are merely watching the <span class="text-zmp-green">tyrants</span> now.',
-      6: 'And when <span class="text-zmp-green">tyrants</span> broke the sixth wall, the white horses became visible to the naked eye, charging through the empty corridors at night.',
-      7: 'And when <span class="text-zmp-green">tyrants</span> broke the seventh wall, only <span class="text-tricolor">three</span> remained. The sky above the school turned a bruised, unnatural purple.',
-      8: 'And when <span class="text-zmp-green">tyrants</span> broke the eight wall there were last moments of peace for the last decision was to be made.',
-      9: 'And when <span class="text-zmp-green">tyrants</span> broke the ninth wall last battle had begun for they (<span class="text-tricolor">three</span> white horses) don\'t know what they had done.',
-      10: 'And when <span class="text-zmp-green">tyrants</span> broke last wall they began to celebrate for they had \'won\' *explosion* meanwhile caused a total armagedon *2 more*'
+      1: 'And when <span class="party-zmp">tyrants</span> broke first wall <span class="text-tricolor">three</span> white horses came charging down the valley.',
+      2: 'And when <span class="party-zmp">tyrants</span> broke the second wall, the white horses rode again. The faculty begin to feel a chill in the air.',
+      3: 'And when <span class="party-zmp">tyrants</span> broke the third wall, the Cultists smiled as they were dragged away. They know the <span class="party-zmp">tyrants</span> do not understand what they are doing.',
+      4: 'And when <span class="party-zmp">tyrants</span> broke the fourth wall, the halls grew quiet. The <span class="text-tricolor">three</span> colors still thought this was a game of elections and polls.',
+      5: 'And when <span class="party-zmp">tyrants</span> broke the fifth wall, the Cultists stopped resisting. They are merely watching the <span class="party-zmp">tyrants</span> now.',
+      6: 'And when <span class="party-zmp">tyrants</span> broke the sixth wall, the white horses became visible to the naked eye, charging through the empty corridors at night.',
+      7: 'And when <span class="party-zmp">tyrants</span> broke the seventh wall, only <span class="text-tricolor">three</span> remained. The sky above the school turned a bruised, unnatural purple.',
+      8: 'And when <span class="party-zmp">tyrants</span> broke the eight wall there were last moments of peace for the last decision was to be made.',
+      9: 'And when <span class="party-zmp">tyrants</span> broke the ninth wall last battle had begun for they (<span class="text-tricolor">three</span> white horses) don\'t know what they had done.',
+      10: 'And when <span class="party-zmp">tyrants</span> broke last wall they began to celebrate for they had \'won\' *explosion* meanwhile caused a total armagedon *2 more*'
     };
 
     if (w === 8) {
@@ -7691,7 +7691,7 @@ function initRelations(st) {
                'As the <span class="text-tricolor">three</span> colors stood together in triumph, the final wall shattered. ' +
                'The explosion did not discriminate. It took the council. It took the faculty. It took the students. ' +
                'It took the school. There is no government left to form. There is no future to build. ' +
-               'There is only the silence of the ash, and the terrifying realization that the <span class="text-zmp-green">tyrants</span> destroyed the world just to win an election.',
+               'There is only the silence of the ash, and the terrifying realization that the <span class="party-zmp">tyrants</span> destroyed the world just to win an election.',
         epilogue: 'Nothing remains. The game is over.'
       };
       return;
@@ -10881,16 +10881,16 @@ if (blResolved && !st._blResolvedSeen) {
     };
 
     var bodies = {
-      1: "And when <span class='text-zmp-green'>tyrants</span> broke first wall <span class='text-tricolor'>three</span> white horses came charging down the valley.",
-      2: "And when <span class='text-zmp-green'>tyrants</span> broke the second wall, the white horses rode again. The faculty begin to feel a chill in the air.",
-      3: "And when <span class='text-zmp-green'>tyrants</span> broke the third wall, the Cultists smiled as they were dragged away. They know the <span class='text-zmp-green'>tyrants</span> do not understand what they are doing.",
-      4: "And when <span class='text-zmp-green'>tyrants</span> broke the fourth wall, the halls grew quiet. The <span class='text-tricolor'>three</span> colors still thought this was a game of elections and polls.",
-      5: "And when <span class='text-zmp-green'>tyrants</span> broke the fifth wall, the Cultists stopped resisting. They are merely watching the <span class='text-zmp-green'>tyrants</span> now.",
-      6: "And when <span class='text-zmp-green'>tyrants</span> broke the sixth wall, the white horses became visible to the naked eye, charging through the empty corridors at night.",
-      7: "And when <span class='text-zmp-green'>tyrants</span> broke the seventh wall, only <span class='text-tricolor'>three</span> remained. The sky above the school turned a bruised, unnatural purple.",
-      8: "And when <span class='text-zmp-green'>tyrants</span> broke the eight wall there were last moments of peace for the last decision was to be made.",
-      9: "And when <span class='text-zmp-green'>tyrants</span> broke the ninth wall last battle had begun for they (<span class='text-tricolor'>three</span> white horses) don't know what they had done.",
-      10: "And when <span class='text-zmp-green'>tyrants</span> broke last wall they began to celebrate for they had 'won' *explosion* meanwhile caused a total armagedon *2 more*"
+      1: "And when <span class='party-zmp'>tyrants</span> broke first wall <span class='text-tricolor'>three</span> white horses came charging down the valley.",
+      2: "And when <span class='party-zmp'>tyrants</span> broke the second wall, the white horses rode again. The faculty begin to feel a chill in the air.",
+      3: "And when <span class='party-zmp'>tyrants</span> broke the third wall, the Cultists smiled as they were dragged away. They know the <span class='party-zmp'>tyrants</span> do not understand what they are doing.",
+      4: "And when <span class='party-zmp'>tyrants</span> broke the fourth wall, the halls grew quiet. The <span class='text-tricolor'>three</span> colors still thought this was a game of elections and polls.",
+      5: "And when <span class='party-zmp'>tyrants</span> broke the fifth wall, the Cultists stopped resisting. They are merely watching the <span class='party-zmp'>tyrants</span> now.",
+      6: "And when <span class='party-zmp'>tyrants</span> broke the sixth wall, the white horses became visible to the naked eye, charging through the empty corridors at night.",
+      7: "And when <span class='party-zmp'>tyrants</span> broke the seventh wall, only <span class='text-tricolor'>three</span> remained. The sky above the school turned a bruised, unnatural purple.",
+      8: "And when <span class='party-zmp'>tyrants</span> broke the eight wall there were last moments of peace for the last decision was to be made.",
+      9: "And when <span class='party-zmp'>tyrants</span> broke the ninth wall last battle had begun for they (<span class='text-tricolor'>three</span> white horses) don't know what they had done.",
+      10: "And when <span class='party-zmp'>tyrants</span> broke last wall they began to celebrate for they had 'won' *explosion* meanwhile caused a total armagedon *2 more*"
     };
 
     if (w === 8) {
@@ -10913,7 +10913,7 @@ if (blResolved && !st._blResolvedSeen) {
         title: 'TOTAL ARMAGEDDON',
         subtitle: 'The Prophecy was true. The TNT Ending.',
         body: bodies[10],
-        story: "They celebrated their victory over the Black League. Then the walls came down. The Green Tyrants stood atop the rubble of the council chamber, victorious. They had prosecuted the fascists, banned their splinters, and erased them from the school. But they had not listened to the warnings. The Cultists were not a political party; they were a doomsday clock. As the <span class='text-tricolor'>three</span> colors stood together in triumph, the final wall shattered. The explosion did not discriminate. It took the council. It took the faculty. It took the students. It took the school. There is no government left to form. There is no future to build. There is only the silence of the ash, and the terrifying realization that the <span class='text-zmp-green'>tyrants</span> destroyed the world just to win an election.",
+        story: "They celebrated their victory over the Black League. Then the walls came down. The Green Tyrants stood atop the rubble of the council chamber, victorious. They had prosecuted the fascists, banned their splinters, and erased them from the school. But they had not listened to the warnings. The Cultists were not a political party; they were a doomsday clock. As the <span class='text-tricolor'>three</span> colors stood together in triumph, the final wall shattered. The explosion did not discriminate. It took the council. It took the faculty. It took the students. It took the school. There is no government left to form. There is no future to build. There is only the silence of the ash, and the terrifying realization that the <span class='party-zmp'>tyrants</span> destroyed the world just to win an election.",
         epilogue: 'Nothing remains. The game is over.'
       };
       return;
