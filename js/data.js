@@ -715,7 +715,7 @@ var MINISTER_FACTIONS = {
     traits: ['voice_of_the_nation', 'child_of_1848']
   }
 ];
-
+//sssssssssssssssssssssssssssssssssssstt
   /* ---------------------------------------------------------------
    * Weekly campaign actions. cost = action points.
    * ------------------------------------------------------------- */
