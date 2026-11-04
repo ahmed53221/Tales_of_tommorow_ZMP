@@ -10913,8 +10913,15 @@ if (blResolved && !st._blResolvedSeen) {
         title: 'TOTAL ARMAGEDDON',
         subtitle: 'The Prophecy was true. The TNT Ending.',
         body: bodies[10],
-        story: "They celebrated their victory over the Black League. Then the walls came down. The Green Tyrants stood atop the rubble of the council chamber, victorious. They had prosecuted the fascists, banned their splinters, and erased them from the school. But they had not listened to the warnings. The Cultists were not a political party; they were a doomsday clock. As the <span class='text-tricolor'>three</span> colors stood together in triumph, the final wall shattered. The explosion did not discriminate. It took the council. It took the faculty. It took the students. It took the school. There is no government left to form. There is no future to build. There is only the silence of the ash, and the terrifying realization that the <span class='party-zmp'>tyrants</span> destroyed the world just to win an election.",
-        epilogue: 'Nothing remains. The game is over.'
+        story: 'They celebrated their victory over the Black League. Then the walls came down. ' +
+               'The Green Tyrants stood atop the rubble of the council chamber, victorious. ' +
+               'They had prosecuted the fascists, banned their splinters, and erased them from the school. ' +
+               'But they had not listened to the warnings. The Cultists were not a political party; they were a doomsday clock. ' +
+               'As the final wall shattered. ' +
+               'The explosion did not discriminate. It took the council. It took the faculty. It took the students. ' +
+               'It took the school. There is no government left to form. There is no future to build. ' +
+               'There is only the silence of the ash.',
+        epilogue: 'It seems they were right now we shall wait to emerge in this new world and we will not stop till every one of those <span class="party-bl">bastardos</span> is hanging from these trees.'
       };
       return;
     }
