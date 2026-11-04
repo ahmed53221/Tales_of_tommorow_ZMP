@@ -4187,7 +4187,7 @@ function renderEventImage(eventId, eventTitle) {
     endingHtml += '</div>';
     
     endingHtml += '<div style="max-width:700px;margin:0 auto;padding:10px 0;">';
-    endingHtml += '<p class="lead" style="font-size:1.1rem;line-height:1.6;">' + esc(e.body) + '</p>';
+    endingHtml += '<p class="lead" style="font-size:1.1rem;line-height:1.6;">' + e.body + '</p>';
     endingHtml += '</div>';
 
     if (e.ending === 'natural_governing' || e.endingNumber === 'Ending 3') {
