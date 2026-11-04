@@ -7653,7 +7653,7 @@ function initRelations(st) {
       7: 'And when <span class="party-zmp">tyrants</span> broke the seventh wall, came back <span class="text-tricolor">those who slayed</span> not for the word of god but yet for their own <span class="party-zmp">greeed</span> and satisfaction. And oh for them it was now to come where it all began.For their last test shall be forgivness. If thou shall not have it.They sure were promised <span class="party-rb">hellfire</span> ',
       8: 'And when <span class="party-zmp">tyrants</span> broke the eight wall those calling themselves liberators came trough for when you first came here you were given the choice to walk away you chose not to and now you are given that choice one last time.',
       9: 'And when <span class="party-zmp">tyrants</span> broke the ninth wall we realised <span class="party-bl">we</span> were wrong for your sin is not <span class="party-rb">wrath</span> you would rather watch the world burn than swallow your <span class="pride">pride</span> and now the three white horses came to challange <span class="party-bl">the truth.</span> For now it is time to begin the cleansing.',
-      10: 'And when <span class="party-zmp">tyrants</span> broke last wall they began to celebrate for they had \'won\' *explosion* meanwhile caused a total armagedon *2 more*'
+      10: 'And when <span class="party-zmp">tyrants</span> broke the last wall the three angels blew the three trumpets for the world was cleansed by god and for now the <span class="party-iia">world</span> as we know it is done. And we have purged the <span class="party-zmp">snake</span> from the garden.'
     };
 
     if (w === 8) {
@@ -7688,11 +7688,11 @@ function initRelations(st) {
                'The Green Tyrants stood atop the rubble of the council chamber, victorious. ' +
                'They had prosecuted the fascists, banned their splinters, and erased them from the school. ' +
                'But they had not listened to the warnings. The Cultists were not a political party; they were a doomsday clock. ' +
-               'As the <span class="text-tricolor">three</span> colors stood together in triumph, the final wall shattered. ' +
+               'As the final wall shattered. ' +
                'The explosion did not discriminate. It took the council. It took the faculty. It took the students. ' +
                'It took the school. There is no government left to form. There is no future to build. ' +
-               'There is only the silence of the ash, and the terrifying realization that the <span class="party-zmp">tyrants</span> destroyed the world just to win an election.',
-        epilogue: 'Nothing remains. The game is over.'
+               'There is only the silence of the ash.',
+        epilogue: 'It seems they were right now we shall wait to emerge in this new world and we will not stop till every one of those <span class="party-bl">bastardos</span> is hanging from these trees.'
       };
       return;
     }
@@ -10890,7 +10890,7 @@ if (blResolved && !st._blResolvedSeen) {
       7: "And when <span class='party-zmp'>tyrants</span> broke the seventh wall, came back <span class='text-tricolor'>those who slayed</span> not for the word of god but yet for their own <span class='party-zmp'>greeed</span> and satisfaction. And oh for them it was now to come where it all began.For their last test shall beforgivness. If thou shall not have it.They sure were promised <span class='party-rb'>hellfire</span>",
       8: "And when <span class='party-zmp'>tyrants</span> broke the eight wall those calling themselves liberators came trough for when you first came here you were given the choice to walk away you chose not to and now you are given that choice one last time.",
       9: "And when <span class='party-zmp'>tyrants</span> broke the ninth wall we realised <span class='party-bl'>we</span> were wrong for your sin is not <span class='party-rb'>wrath</span> you would rather watch the world burn than swallow your <span class='pride'>pride</span> and now the three white horses came to challange <span class='party-bl'>the truth.</span> For now it is time to begin the cleansing.",
-      10: "And when <span class='party-zmp'>tyrants</span> broke last wall they began to celebrate for they had 'won' *explosion* meanwhile caused a total armagedon *2 more*"
+      10:  " And when <span class='party-zmp'>tyrants</span> broke the last wall the three angels blew the three trumpets for the world was cleansed by god and for now the <span class='party-iia'>world</span> as we know it is done. And we have purged the <span class='party-zmp'>snake</span> from the garden."
     };
 
     if (w === 8) {
