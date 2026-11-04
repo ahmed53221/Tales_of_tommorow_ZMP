@@ -9761,12 +9761,12 @@ if (eff.zalgriliankingLegionRefuses) {
   var weinGain = 8 + rng() * 4;
   st.relations.wein = Math.min(100, (st.relations.wein || 40) + weinGain);
   notes.push('📈 Relations with Arbeiter von Wein improved by ' + Math.round(weinGain) + '%');
-  notes.push('🌍 Current Wein relations: ' + Math.round(st.relations.wein) + '%');
+  notes.push(' Current Wein relations: ' + Math.round(st.relations.wein) + '%');
   
   // Check if Wein alliance threshold reached
   if (st.relations.wein >= 70 && !st.hasArbeiterAlly) {
     notes.push(' WEIN ALLIANCE UNLOCKED!');
-    notes.push('🌍 Arbeiter von Wein is now your ally!');
+    notes.push(' Arbeiter von Wein is now your ally!');
     st.hasArbeiterAlly = true;
     st.allyBoost = 0.5;
     
@@ -9791,7 +9791,7 @@ if (eff.zalgriliankingLegionRefuses) {
   
   if (st.relations.wein >= 70 && !st.hasArbeiterAlly) {
     notes.push(' WEIN ALLIANCE UNLOCKED!');
-    notes.push('🌍 Arbeiter von Wein is now your ally!');
+    notes.push(' Arbeiter von Wein is now your ally!');
     st.hasArbeiterAlly = true;
     st.allyBoost = 0.5;
     
@@ -9820,14 +9820,14 @@ if (eff.zalgriliankingLegionRefuses) {
           st.raw.ZMP[dm.id] = Math.max(0.5, (st.raw.ZMP[dm.id] || 0) + 4);
         }
       }
-      notes.push('🌍 Arbeiter von Wein is now your formal ally!');
-      notes.push('📈 ZMP +4% across all groups!');
-      notes.push('💪 Allied actions are now 50% more effective!');
+      notes.push(' Arbeiter von Wein is now your formal ally!');
+      notes.push(' ZMP +4% across all groups!');
+      notes.push(' Allied actions are now 50% more effective!');
       st.log.push('Week ' + st.week + ': Wein Alliance formalized');
     }
   } else {
     notes.push(' Need 70+ relations with Wein. Current: ' + Math.round(st.relations.wein || 0) + '%');
-    notes.push('🌍 Use Diplomatic Talks and Gifts to improve relations.');
+    notes.push(' Use Diplomatic Talks and Gifts to improve relations.');
   }
   msg = 'You attempt to formalize the Wein alliance.';
 }
@@ -9910,7 +9910,7 @@ if (eff.zalgriliankingLegionRefuses) {
     st.unity = clamp(st.unity + 2, 0, 100);
     st.faculty = clamp(st.faculty + 1, 0, 100);
 
-      // --- DYNAMIC AI & PROPHECY CHECKS (MUST BE BEFORE EVENTS) ---
+      
     checkAIDynamics(st);
 
     if (!st.prophecy.active && st.blFactions && st.blFactions.cultists >= 70 && !st.prophecy.halted) {

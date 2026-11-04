@@ -754,18 +754,17 @@ api.launchPutsch = function() {
           subtitle: 'The Council Chamber is ours. The Black League is finished.',
           endingNumber: 'Ending 22',
            body:
-        'The Dzehurjaca Legion — with the support of roughly 3% of the student body — ' +
-        'has seized the Council Chamber. Not because they were popular. Because no one ' +
-        'stopped them.',
+        'We came that friday and ' +
+        'and by Allah s will no one stopped <span class ="party-zpf">us</span>',
       story:
-        'The Legion marched on the Council Chamber on a Friday afternoon, when the ' +
-        'teachers had gone home and the buses had already left. There were maybe eighty ' +
-        'of them. They did not run. They did not hide. They walked, in formation, through ' +
-        'the front doors of the school, past the trophy case, past the library, past the ' +
+        'We came that friday from the east side of town, where the buses had already left. There were maybe eighty of us ' +
+        'teachers had gone home and the time was that of magrib prayer ' +
+        'we were outnumbered about <span class="party-bl">fifty</span> <span class="party-zpf">to one</span> ' +
+        'but yet we went past the front doors of the school, past the trophy case, past the library, past the ' +
         'science wing, and up the west staircase to the council chamber. ' +
-        'A few people tried to stop them. A janitor stood in the doorway of the science ' +
-        'wing and was pushed aside. A sophomore in the library tried to call the police ' +
-        'and could not get a signal. Two seniors stood at the top of the west staircase ' +
+        'A few people tried to stop us. Yet most of them didn t care.' +
+        'some of them tried to call the police ' +
+        'but could not get a signal. Two seniors stood at the top of the west staircase ' +
         'and shouted — actually shouted, at the top of their lungs — for someone, anyone, ' +
         'to come and help. Nobody came. The seniors stepped aside. The Legion walked past ' +
         'them and did not even slow down. ' +
@@ -4201,7 +4200,7 @@ function renderEventImage(eventId, eventTitle) {
     
     if (e.story) {
       endingHtml += '<div class="result-box" style="margin:15px 0;padding:15px 20px;background:#1a1a1a;border-radius:4px;border-left:3px solid #5fae3c;">';
-      endingHtml += '<p style="line-height:1.7;font-size:0.95rem;">' + esc(e.story) + '</p>';
+      endingHtml += '<p style="line-height:1.7;font-size:0.95rem;">' + e.story + '</p>';
       endingHtml += '</div>';
     }
     
