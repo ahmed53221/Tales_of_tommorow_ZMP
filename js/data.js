@@ -758,7 +758,6 @@ var ACTIONS = [
 ];
 
 
-
   var ADVISOR_ACTIONS = [
   { id: 'advisor_rally', name: ' Rally the People', desc: 'Your advisors organize a massive rally. +5% ZMP support, +2 momentum.', effect: { zmp: 5, momentum: 2 }, cost: { ap: 1, budget: 10 } },
   { id: 'advisor_media', name: ' Media Campaign', desc: 'Advisors launch a media blitz. +4% ZMP, +3% faculty.', effect: { zmp: 4, faculty: 3 }, cost: { ap: 1, budget: 15 } },
