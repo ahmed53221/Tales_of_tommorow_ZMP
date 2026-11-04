@@ -7692,7 +7692,7 @@ function initRelations(st) {
                'The explosion did not discriminate. It took the council. It took the faculty. It took the students. ' +
                'It took the school. There is no government left to form. There is no future to build. ' +
                'There is only the silence of the ash.',
-        epilogue: 'It seems they were right now we shall wait to emerge in this new world and we will not stop till every one of those <span class="party-bl">bastardos</span> is hanging from these trees.'
+        epilogue: 'It seems they were right now we shall wait to emerge in this new world and we will not stop till every one of those bastardos is hanging from these trees.'
       };
       return;
     }
@@ -10921,7 +10921,7 @@ if (blResolved && !st._blResolvedSeen) {
                'The explosion did not discriminate. It took the council. It took the faculty. It took the students. ' +
                'It took the school. There is no government left to form. There is no future to build. ' +
                'There is only the silence of the ash.',
-        epilogue: 'It seems they were right now we shall wait to emerge in this new world and we will not stop till every one of those <span class="party-bl">bastardos</span> is hanging from these trees.'
+        epilogue: 'It seems they were right now we shall wait to emerge in this new world and we will not stop till every one of those bastardos is hanging from these trees.'
       };
       return;
     }
