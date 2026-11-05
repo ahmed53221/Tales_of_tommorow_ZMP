@@ -764,17 +764,16 @@ api.launchPutsch = function() {
         'science wing, and up the west staircase to the council chamber. ' +
         'A few people tried to stop us. Yet most of them didn t care.' +
         'some of them tried to call the police ' +
-        'but could not get a signal. Two seniors stood at the top of the west staircase ' +
-        'and shouted — actually shouted, at the top of their lungs — for someone, anyone, ' +
-        'to come and help. Nobody came. The seniors stepped aside. The Legion walked past ' +
-        'them and did not even slow down. ' +
+        'but could not get a signal . For their sinful technology gave up on them. ' +
+        'They shouted and shouted but only sound that was truly heard was the adhan for Isha prayer. ' +
+        'They lost for <span class="party-zpf">true muslims that is us had won</span> ' +
         'The Black League had spent two years preparing for a war against the ZMP, and ' +
-        'when the war came, it came from a direction they had never expected. Mehmedera ' +
+        'when the war came, it came from a direction they had never expected. Yet it came from way of the truth. Mehmedera ' +
         'was found in the second-floor bathroom, hiding behind a mop bucket. He was not ' +
-        'shot — the Legion had other plans for him. He was put on trial, in the gym, in ' +
-        'front of the whole school, and the verdict was never in doubt. ' +
+        'shot — Yet he was stoned 100 times. In' +
+        'front of the whole school, and <span class="party-zpf">the victors</span> were by Allah s will never in doubt ' +
         'By the end of the week, the school had a new government. It was not elected. It ' +
-        'was not appointed. It was accepted. The Legion had marched, and the school had ' +
+        'was not appointed. It was accepted. The new <span class="party-zmp">Caliphate</span> was formed. The sinners ' +
         'stepped aside, and that was that.',
       subending: 'Subending V — The March That Nobody Stopped',
       detail:
