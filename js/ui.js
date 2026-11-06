@@ -783,24 +783,24 @@ api.launchPutsch = function() {
         '<div class="stat"><span>Outcome</span><span class="v" style="color:#5fae3c;font-weight:bold;">VICTORY (for the Legion)</span></div>' +
         '<div class="stat"><span></span><span class="v" style="color:#cc0000;font-weight:bold;">COLLAPSE (for the school)</span></div>',
       epilogue:
-        'The Legion never disbanded. It grew. Ten years later it had a gym on the ground ' +
-        'floor, a recruitment office by the main entrance, and a waiting list that ran to ' +
-        'three pages. The school changed its name twice — first to Madrasat al-Nur, then ' +
-        'simply to the Academy — and the portraits that had once hung in the hallway were ' +
-        'gone, replaced by calligraphy, and no one who had not been there could remember ' +
-        'what the old headmaster had looked like. Every year, on the anniversary, the ' +
-        'Legion marched through the courtyard at dusk — marched, in step, in formation — ' +
-        'and the whole school was silent, and everyone remembered. ' +
-        'But what they remembered was not the march. It was the silence that met it. ' +
+        'The Legion never disbanded. It transformed into a full on rebellion ' +
+        'The caliphate lasted for 27 years — ' +
+        'three years into new rule whole <span class="party-bl">bunch of sinners</span> ' +
+        'came to dethrone the caliph. even tho they were 70 to 1 <span class="party-zpf">caliphate </span> didn t fall some of the sinners converted the rest ' +
+        'gone, some stoned to death others whipped  ' +
+        'As the years passed, <span class="party-zpf">the caliphate</span> became more decentralized. ' +
+        'And there was only one fact <span class="party-zpf">the caliphate</span> was not ever conquered but yet split into many sultanates as years passed ' +
+        'and the whole school was carved up in the conflict ' +
+        'For after another decade of turmoil needed to pass for caliphate to return' +
         'The Legion had 3% of the school. They won because the other 97% did not stop ' +
-        'them. The faculty could have called the police. The council could have called a ' +
-        'vote of no confidence. The students could have walked out. The Black League could ' +
-        'have fought. The ZMP could have organized resistance. None of them did. And so a ' +
+        'them. The faculty could have called the police yet divine intervention stopped them.  ' +
+        'The students had walked out. The Black League had ' +
+        'fought.And so a ' +
         'faction that represented almost nobody ended up ruling everybody — not because ' +
-        'they were strong, but because everyone else was afraid to be the first to say no. ' +
+        'they were strong, but because everyone else was carved up by <span class="ro16">Pride and Fear</span>. ' +
         'The lesson was not that the Legion was powerful. The lesson was that the school ' +
-        'was not. It had been given a choice: submit, or resist. It submitted. And in ' +
-        'submitting, it ceased to be the school it had been.'
+        'was not united. It had been given a choice: unite , or get crushed. And yet ' +
+        'in the end <span class="party-bl">the black league</span> was crushed by their own <span class="pride">pride</span>.'
         };
       }
     }
@@ -4205,7 +4205,7 @@ function renderEventImage(eventId, eventTitle) {
     
     if (e.subending) {
       endingHtml += '<div style="margin:15px 0;padding:10px 15px;background:#0d0d0d;border-radius:4px;border:1px solid #333;">';
-      endingHtml += '<p style="color:#888;font-size:0.9rem;font-style:italic;">' + esc(e.subending) + '</p>';
+      endingHtml += '<p style="color:#888;font-size:0.9rem;font-style:italic;">' + e.subending + '</p>';
       endingHtml += '</div>';
     }
     
@@ -4219,7 +4219,7 @@ function renderEventImage(eventId, eventTitle) {
     if (e.epilogue) {
       endingHtml += '<div style="margin:15px 0;padding:15px 20px;background:#0d0d0d;border-radius:4px;border-top:2px solid #333;">';
       endingHtml += '<h3 style="font-size:0.9rem;color:#666;text-transform:uppercase;letter-spacing:0.05em;">Epilogue</h3>';
-      endingHtml += '<p style="line-height:1.7;font-size:0.95rem;">' + esc(e.epilogue) + '</p>';
+      endingHtml += '<p style="line-height:1.7;font-size:0.95rem;">' + e.epilogue + '</p>';
       endingHtml += '</div>';
     }
     
