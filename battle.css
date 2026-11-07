@@ -1,10 +1,6 @@
-/* battle.css - Styles for the standalone 3D battle page */
+/* battle.css - tactical battle screen */
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
   font-family: 'Roboto Mono', monospace;
@@ -28,22 +24,16 @@ body {
   width: 100%;
   height: 100%;
 }
+#canvas-container canvas { display: block; }
 
-#canvas-container canvas {
-  display: block;
-}
-
-/* ============================================================ */
-/* UI OVERLAY                                                   */
-/* ============================================================ */
-
+/* top ui */
 #ui-overlay {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  pointer-events: none;
+  pointer-events: none; /* let clicks pass through to canvas */
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -62,18 +52,11 @@ body {
   border-radius: 8px;
   padding: 10px 18px;
   font-size: 0.9rem;
-  backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px); /* looks cool */
 }
 
-#player-stats {
-  border-color: #2a8f2a;
-  color: #7fdf7f;
-}
-
-#enemy-stats {
-  border-color: #8a1010;
-  color: #ff7070;
-}
+#player-stats { border-color: #2a8f2a; color: #7fdf7f; }
+#enemy-stats { border-color: #8a1010; color: #ff7070; }
 
 .stats-box .label {
   color: #888;
@@ -82,10 +65,7 @@ body {
   letter-spacing: 0.05em;
 }
 
-.stats-box .value {
-  font-weight: 700;
-  font-size: 1.1rem;
-}
+.stats-box .value { font-weight: 700; font-size: 1.1rem; }
 
 #bottom-bar {
   display: flex;
@@ -107,22 +87,10 @@ body {
   transition: opacity 0.2s;
 }
 
-#unit-info.visible {
-  opacity: 1;
-}
-
-#unit-info .unit-name {
-  font-weight: 700;
-  margin-bottom: 5px;
-}
-
-#unit-info .unit-stat {
-  color: #aaa;
-}
-
-#unit-info .unit-stat span {
-  color: #fff;
-}
+#unit-info.visible { opacity: 1; }
+#unit-info .unit-name { font-weight: 700; margin-bottom: 5px; }
+#unit-info .unit-stat { color: #aaa; }
+#unit-info .unit-stat span { color: #fff; }
 
 #controls-hint {
   background: rgba(0, 0, 0, 0.6);
@@ -132,10 +100,7 @@ body {
   color: #888;
 }
 
-/* ============================================================ */
-/* SIDE PANEL                                                   */
-/* ============================================================ */
-
+/* right side panel */
 #side-panel {
   position: absolute;
   top: 80px;
@@ -186,25 +151,10 @@ body {
   border-color: #5fae3c;
 }
 
-.recruit-btn:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-}
-
-.recruit-btn .name {
-  font-weight: 700;
-}
-
-.recruit-btn .cost {
-  color: #ffd700;
-}
-
-.recruit-btn .desc {
-  display: block;
-  font-size: 0.7rem;
-  color: #888;
-  margin-top: 2px;
-}
+.recruit-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.recruit-btn .name { font-weight: 700; }
+.recruit-btn .cost { color: #ffd700; }
+.recruit-btn .desc { display: block; font-size: 0.7rem; color: #888; margin-top: 2px; }
 
 #log-panel {
   background: rgba(0, 0, 0, 0.8);
@@ -221,7 +171,6 @@ body {
   color: #ffd700;
   margin-bottom: 8px;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
 }
 
 #log-panel .log-entry {
@@ -230,10 +179,7 @@ body {
   padding: 3px 0;
   border-bottom: 1px solid #222;
 }
-
-#log-panel .log-entry:last-child {
-  border-bottom: none;
-}
+#log-panel .log-entry:last-child { border-bottom: none; }
 
 #end-battle-btn {
   background: #8a1010;
@@ -247,29 +193,17 @@ body {
   cursor: pointer;
   transition: all 0.15s;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
 }
 
-#end-battle-btn:hover {
-  background: #aa2020;
-  border-color: #ff6060;
-}
+#end-battle-btn:hover { background: #aa2020; border-color: #ff6060; }
 
-/* ============================================================ */
-/* 3D LABELS (CSS2DRenderer)                                    */
-/* ============================================================ */
-
+/* 3d labels */
 .capital-label {
   font-family: 'Roboto Mono', monospace;
   font-size: 11px;
   font-weight: 700;
   color: #fff;
-  text-shadow: 
-    -1px -1px 0 #000,  
-     1px -1px 0 #000,
-    -1px  1px 0 #000,
-     1px  1px 0 #000,
-     0 0 6px rgba(0,0,0,0.8);
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000, 0 0 6px rgba(0,0,0,0.8);
   white-space: nowrap;
   pointer-events: none;
   user-select: none;
@@ -291,11 +225,7 @@ body {
   font-family: 'Roboto Mono', monospace;
   font-size: 14px;
   font-weight: 700;
-  text-shadow: 
-    -1px -1px 0 #000,  
-     1px -1px 0 #000,
-    -1px  1px 0 #000,
-     1px  1px 0 #000;
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
   white-space: nowrap;
   pointer-events: none;
   user-select: none;
@@ -307,10 +237,7 @@ body {
   100% { opacity: 0; transform: translateY(-40px); }
 }
 
-/* ============================================================ */
-/* HEALTH BARS                                                  */
-/* ============================================================ */
-
+/* health bars */
 .health-bar {
   width: 40px;
   height: 4px;
@@ -326,14 +253,6 @@ body {
   transition: width 0.1s;
 }
 
-.health-bar .fill.enemy {
-  background: #ff6060;
-}
-
-.health-bar .fill.low {
-  background: #ffaa00;
-}
-
-.health-bar .fill.critical {
-  background: #ff3030;
-}
+.health-bar .fill.enemy { background: #ff6060; }
+.health-bar .fill.low { background: #ffaa00; }
+.health-bar .fill.critical { background: #ff3030; }

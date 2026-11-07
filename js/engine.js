@@ -73,16 +73,11 @@ window.Engine = (function () {
     return { ok: true, msg: 'The White League is formed!' };
   }
 
-  function getPartySupport(st, pid) {
-    if (!st.raw || !st.raw[pid]) return 0;
-    var total = 0, count = 0;
-    if (!D || !D.DEMOS) return 0;
-    for (var i = 0; i < D.DEMOS.length; i++) {
-      var dm = D.DEMOS[i];
-      total += st.raw[pid][dm.id] || 0;
-      count++;
-    }
-    return count > 0 ? total / count : 0;
+    function getPartySupport(st, pid) {
+    if (!st || !st.raw || !st.raw[pid]) return 0;
+   
+    var sup = computeSupport(st);
+    return sup.totals[pid] || 0;
   }
 
   function demoName(id) {
@@ -3677,6 +3672,116 @@ function resolveBattle4(st, choice, rng) {
     return notes;
   }
 
+function updateAIParamilitaries(st, rng) {
+  if (!st.paramilitaries) return;
+  var notes = [];
+
+  // Helper to add strength
+  function growForce(forceId, baseRecruit, trainChance) {
+    var force = st.paramilitaries[forceId];
+    if (!force || force.members <= 0) return;
+
+    // 1. Recruit new members based on their party's support
+    var partySupport = getPartySupport(st, force.faction);
+    var recruitAmount = Math.floor(baseRecruit + (partySupport / 4) + rng() * 10);
+    force.members += recruitAmount;
+
+    // 2. Train and equip if they have money/support
+    if (rng() < trainChance) {
+      if (rng() < 0.5) force.training = Math.min(10, force.training + 0.5);
+      else force.equipment = Math.min(10, force.equipment + 0.5);
+    }
+    
+    // 3. Morale fluctuates
+    force.morale = Math.max(10, Math.min(100, force.morale + (rng() * 4 - 1)));
+  }
+
+  // --- RED MILITIA (The Bolsheviks) ---
+  // They grow fast if the player is reactionary (low affinity)
+  var redAffinity = st.affinity.red || 35;
+  var redGrowthBonus = redAffinity < 30 ? 20 : 0; // Extra angry = extra recruits
+  growForce('red_militia', 10 + redGrowthBonus, 0.4);
+
+  // --- BLACK LEAGUE (The Fascists) ---
+  // They grow if the Black League has high support or if they have splintered
+  var blSupport = getPartySupport(st, 'bl');
+  var blGrowthBonus = blSupport > 20 ? 15 : 0;
+  if (!st.blSplintered) {
+    growForce('black_legion', 8 + blGrowthBonus, 0.5);
+  }
+
+  // --- IIA GUARD (The Tech Bros) ---
+  // They grow steadily if IIA is doing well
+  if (st.affinity.iia > 50) {
+    growForce('iia_guard', 5, 0.3);
+  }
+
+  // --- DZEHURJACA (If the player is AI-controlled or just for balance) ---
+  // Usually the player handles their own, but if a Jihadist AI runs it, it grows.
+  if (st.faction !== 'jihadists') {
+      growForce('dzehurjaca', 2, 0.2);
+  }
+  
+  return notes;
+}
+
+function checkRedMilitiaCoup(st, rng) {
+  var notes = [];
+  
+  // Needs to be mid-to-late game, and the coup hasn't happened yet
+  if (st.week < 20 || st.redCoupTriggered || st.finished) return notes;
+  
+  // Ensure paramilitaries exist
+  if (!st.paramilitaries || !st.paramilitaries.red_militia) return notes;
+  
+  var redForce = st.paramilitaries.red_militia;
+  var redStrength = calculateParamilitaryStrength(redForce);
+  var redSupport = getPartySupport(st, 'red');
+  
+  // Threshold: Red militia is massive (e.g., > 150 strength) and Red support is high (> 25%)
+  // OR the player is severely weakened (faculty < 20)
+  if (redStrength > 150 ) {
+    st.redCoupTriggered = true;
+    
+    notes.push('🚨 RED MILITIA UPRISING! 🚨');
+    notes.push('The Red Militia has grown too powerful. They are seizing the school!');
+    
+    st.pendingEvent = {
+      id: 'red_coup_event',
+      week: st.week,
+      title: '🔥 THE RED UPRISING',
+      body: 'The Red Militia, backed by the Red Front and Red Bench, has barricaded the cafeteria and seized the gymnasium. They are demanding the immediate dissolution of the council and the establishment of a Student Commune. If you do not stop them, the school falls to the revolution.',
+      choices: [
+        {
+          text: 'Deploy the Dzehurjaca Legion to crush the uprising.',
+          note: 'Violent suppression. High faculty backlash, but saves the government.',
+          effects: { redCoupResponse: 'crush' }
+        },
+        {
+          text: 'Let the Black League fight them. A three-way brawl.',
+          note: 'Cynical. Let your enemies destroy each other.',
+          effects: { redCoupResponse: 'bl_fight' }
+        },
+        {
+          text: 'Concede to their demands. A coalition with the Reds.',
+          note: 'Surrender. You keep your life, but lose your power.',
+          effects: { redCoupResponse: 'concede' }
+        }
+      ]
+    };
+    
+    return notes;
+  }
+  
+  // If their strength is high but not coup-level, give a warning
+  if (redStrength > 120 && redSupport > 15 && !st.redCoupWarning) {
+    st.redCoupWarning = true;
+    notes.push('⚠️ WARNING: The Red Militia is growing rapidly. If they gain more strength, they may attempt a coup.');
+  }
+  
+  return notes;
+}
+
 
 
   /* ---------------- Black League Surge (Week 7) ---------------- */
@@ -4923,20 +5028,47 @@ function resolveCongress(st, optionIndex, rng) {
   // =========================================================
   // UNIVERSAL DEFEAT: Black League victory (fires immediately)
   // =========================================================
-  if (st.gameOver === true || st.battle3Lost === true) {
-    return {
-      ending: 'black_league_victory',
-      title: 'The Black League Triumphs',
-      subtitle: 'Darkness falls over the school.',
-      endingNumber: 'Ending 1',
-      body: 'The Black League has won. The school falls to darkness.',
-      story: 'The Black League has consolidated its control over the school. The council is abolished. The faculty is purged. Students live in fear. Your coalition lies in ruins.',
-      subending: 'Subending A - The Long Night',
-      detail: '<div class="stat"><span>Week</span><span class="v">' + st.week + '</span></div>',
-      epilogue: 'The Black League rules for a generation. Their grip on the school is absolute.'
-    };
-  }
+      if (st.gameOver === true || st.battle3Lost === true) {
+      return {
+        ending: 'black_league_victory',
+        title: '<span class="party-bl">THE Dictatorship?</span>',
+        subtitle: 'The school falls into the dark.',
+        endingNumber: 'Ending 1',
+        body: 'The Black League has won. <span class="party-zmp"> The ZMP </span> continues guerilla warfare',
+        story: 
+          'It happened so fast that day that this couldn t be a coincidence they had to be supported by <span class="party-iia"> United </span> <span class="party-red"> States </span> <span class="white"> of America </span>  ' +
+          'and their corrupt <span class="party-iia"> CIA officials </span> ' +
+          '<span class="party-bl">The Fascchi council </span> was appointed without elections ' +
+          'The false government grew more align with the West ' +
+          'Mehmedera did not even hold a victory rally. He just walked into the principal\'s ' +
+          'office, sat down at the desk, and started signing official decrees and grating West more resources. ' +
+          'The first decree: All opposition organizations are banned. The second decree: ' +
+          'The curriculum will be revised to focus on "National Discipline and western culture." The third decree: ' +
+          'The library is closed until further notice, and all books deemed "anti-democratic" ' +
+          'will be burned in the courtyard. ' +
+          'By the end of the month, the school had a new name: The rasci-fasci school. ' +
+          '<span class=party-bl"> The Dictatorship </span>'  +
+          'lasts for a long time. ' +
+          'now 6 years have passed ' +
+          'But as yanquis have moved away to new targets it soon might be time to strike',
+        subending: 'Subending A — The Long Night',
+        detail: 
+          '<div class="stat"><span>Week</span><span class="v">' + st.week + '</span></div>' +
+          '<div class="stat"><span>BL Support</span><span class="v">' + Math.round(getPartySupport(st, 'bl')) + '%</span></div>' +
+          '<div class="stat"><span>Outcome</span><span class="v" style="color:#cc0000;font-weight:bold;">TOTALITARIAN VICTORY</span></div>',
+        epilogue: 
+          'New support for some <span class="ro16"> new groups</span> ' +
+          'Led to massive protests and eventually <span class="party-zmp">return of the king </span> to lead the revolution  . ' +
+          'Now the support for <span class="text-tricolor"> revolution </span> ' +
+          'is higher than ever. ' +
+          'The students are split with some supporting one others the other side. ' +
+          'Now school will get ravaged before it can be rebuilt ' +
+          'But now as the exile is over ' +
+          'for those calling themselves <span class="ro16">The Revolution of 18th</span' 
+      };
+    }
 
+    
   // =========================================================
   // UNIVERSAL GATE
   // No faction ending can fire until the Black League arc has
@@ -5062,12 +5194,12 @@ function resolveCongress(st, optionIndex, rng) {
         title: 'The Restored Monarchy',
         subtitle: 'The crown returns to the school.',
         endingNumber: 'Ending 20',
-        body: 'The Zalgrilianists have won a majority. You have restored the monarchy.',
-        story: 'The council is reformed into a royal court. The chair is replaced by a throne. The school is governed by a benevolent monarch — you. The students cheer. The faculty bows. The ZMP is the party of the crown.',
+        body: '<span class="party-zpf">The Zalgrilianists</span> have won a majority. You have restored the monarchy peacfully.',
+        story: 'The council is abolished to be replaced with <span class="party-zmp"> The house of commons</span>. But realisticly it is just a puppet to <span class="party-zpf">The king</span>. The school is governed by a king. The king took the title of King of <span class="party-zmp">Zalgrilia</span>, <span class="una">Zaliria</span>, <span class="unb">Zalia</span>',
         subending: 'Subending T - The Crown Returns',
         detail: '<div class="stat"><span>Week</span><span class="v">' + st.week + '</span></div>' +
           '<div class="stat"><span>ZMP Seats</span><span class="v">' + zmpSeats + ' / ' + D.SEATS + '</span></div>',
-        epilogue: 'The monarchy is restored. The school is ruled by a wise and just king.'
+        epilogue: 'Years later as the school expanded king was not a king anymore yet just one <span class="party-zpf">Emperor of Zalgrilia</span>. Parties and democracy were long forgotten. We do not know what will happen in the future.But for now Long live <span class="party-zmp">Second Zalgrilian empire</span>, Long live the emperor.'
       };
     }
   }
@@ -8054,6 +8186,84 @@ function initRelations(st) {
     return total;
   }
 
+function resolveRedCoup(st, response, rng) {
+  var notes = [];
+  var redForce = st.paramilitaries.red_militia;
+  var dzForce = st.paramilitaries.dzehurjaca;
+  var blForce = st.paramilitaries.black_legion;
+  
+  if (response === 'crush') {
+    notes.push('The Dzehurjaca Legion marches on the cafeteria.');
+    var dzStrength = calculateParamilitaryStrength(dzForce);
+    var redStrength = calculateParamilitaryStrength(redForce);
+    
+    if (dzStrength > redStrength) {
+      notes.push('VICTORY! The Red Militia is crushed.');
+      redForce.members = Math.floor(redForce.members * 0.2);
+      redForce.morale = 10;
+      st.faculty = clamp(st.faculty - 20, 0, 100); // Faculty hates you for this
+      st.unity = clamp(st.unity + 5, 0, 100);
+      st.affinity.red = clamp((st.affinity.red || 0) - 30, 0, 100);
+    } else {
+      notes.push('DEFEAT! The Legion is overwhelmed. The Reds take the school.');
+      st.finished = true;
+      st.endingData = {
+        ending: 'red_coup_victory',
+        title: 'THE RED UPRISING SUCCEEDS',
+        subtitle: 'The commune is established.',
+        body: '<span class="party-rb">The Red Militia has seized the council chamber.</span>',
+        story: 'The Dzehurjaca Legion fought bravely but it seems <span class="party-zmp">our leader </span> was a complete idiot, for  the Red Militia had the numbers but had no guns. <span class="party-zmp"> Meaning our tactics were stupid.</span> The council chamber fell by sunset. The <span class="party-rb">red sicle and star</span> flies over the school.',
+        epilogue: 'The ZMP is banned along with <span class="text-tricolor">every other party</span>. Political opponents are prosecuted to the gulag.Their little comune bankrupts the school there is no money to pay for the school for that happens when you allow <span class="party-rb"> stalinism</span> to run the school.This didn t happen beacuse they were strong but yet beacuse <span class="party-zmp"> we</span> were weak.Their <span class="party-rb"> commune</span> leads to a blockade of the school for next 11 years. When this new revolution rises.<span class="party-zmp"> Lang Livela Mekrusa Zalgrilia!</span> (Long Live Free Zalgrilia!)'
+      };
+    }
+  } 
+  else if (response === 'bl_fight') {
+    notes.push('You step back and let the Black League and the Red Militia fight it out.');
+    var blStrength = calculateParamilitaryStrength(blForce);
+    var redStrength = calculateParamilitaryStrength(redForce);
+    
+    if (blStrength > redStrength) {
+      notes.push('The Black League crushes the Reds, but they take heavy casualties.');
+      redForce.members = 0;
+      blForce.members = Math.floor(blForce.members * 0.5);
+      // The Black League gets a huge boost for "saving" the school
+      if (D && D.DEMOS) {
+        for (var i = 0; i < D.DEMOS.length; i++) {
+          var dm = D.DEMOS[i];
+          st.raw.bl[dm.id] = Math.max(0.5, (st.raw.bl[dm.id] || 0) + 5);
+        }
+      }
+      notes.push('The Black League gains massive support for "restoring order."');
+    } else {
+      notes.push('The Black League is destroyed. The Reds win.');
+      blForce.members = 0;
+      st.finished = true;
+      st.endingData = {
+        ending: 'red_coup_victory',
+        title: 'THE RED UPRISING SUCCEEDS',
+        subtitle: 'The commune is established.',
+        body: '<span class="party-rb">The Red Militia has seized the council chamber.</span>',
+        story: 'The Dzehurjaca Legion fought bravely but it seems <span class="party-zmp">our leader </span> was a complete idiot, for  the Red Militia had the numbers but had no guns. <span class="party-zmp"> Meaning our tactics were stupid.</span> The council chamber fell by sunset. The <span class="party-rb">red sicle and star</span> flies over the school.',
+        epilogue: 'The ZMP is banned along with <span class="text-tricolor">every other party</span>. Political opponents are prosecuted to the gulag.Their little comune bankrupts the school there is no money to pay for the school for that happens when you allow <span class="party-rb"> stalinism</span> to run the school.This didn t happen beacuse they were strong but yet beacuse <span class="party-zmp"> we</span> were weak.Their <span class="party-rb"> commune</span> leads to a blockade of the school for next 11 years. When this new revolution rises.<span class="party-zmp"> Lang Livela Mekrusa Zalgrilia!</span> (Long Live Free Zalgrilia!)'
+      };
+    }
+  } 
+  else if (response === 'concede') {
+    notes.push('You concede to the Red Militia. The council is dissolved.');
+    st.finished = true;
+    st.endingData = {
+      ending: 'concession',
+      title: '<span class="party-rb">The great idiotism</span>',
+      subtitle: '<span class="party-zmp">You think you traded</span> power for peace. But it seems somebody didn t read the definition of <span class="party-bl">Anarchism</span>.',
+      body: 'You step down and nothing is formed.',
+      story: 'You gave them what they wanted. The council is dissolved, but <span class="party-zmp"> you are happy no blood is spilled</span> yet. For you are truly blind. You have given power to nobody congratulations.You made the <span class="party-iia">hunger games</span>.',
+      epilogue: '<span class="party-zmp">You think</span> <span class="party-rb">the Commune rises</span>, but you are still alive. History may call you a coward, but at least you are not a martyr.But then one <span class="party-bl">night</span> you are woken up by a bell naturally you open the door and you hear only one sentance <span class="party-zmp"> Lang livela Mekrusa Zalgrilia!</span> you absolute disgrace as you get shot twice in the head.',
+    };
+  }
+  
+  return notes;
+}
+
   /* ---------------- Apply Effects ---------------- */
   function applyEffects(st, eff, rng) {
     var notes = [];
@@ -8119,6 +8329,11 @@ function initRelations(st) {
       st.prophecy.halted = true;
       notes.push('The tyrants stepped back from the edge. The prophecy halts.');
       st.log.push('Week ' + st.week + ': The tyrants walked away from the 8th wall.');
+    }
+
+    if (eff.redCoupResponse) {
+      var coupNotes = resolveRedCoup(st, eff.redCoupResponse, rng);
+      notes = notes.concat(coupNotes);
     }
 
     if (eff.setFlags) {
@@ -8990,6 +9205,27 @@ if (eff.zalgriliankingLegionRefuses) {
         }
       }
     }
+
+
+ // 2. Split the Paramilitary!
+  if (st.paramilitaries && st.paramilitaries.red_militia && st.paramilitaries.black_legion) {
+    var redMilitia = st.paramilitaries.red_militia;
+    var blLegion = st.paramilitaries.black_legion;
+    
+    // The Red Bench takes 40% of the militia with them to the Black League
+    var defectors = Math.floor(redMilitia.members * 0.4);
+    redMilitia.members -= defectors;
+    blLegion.members += defectors;
+    
+    // The Red Front survivors get a MASSIVE morale and training boost
+    // They are now the hardcore Vanguard.
+    redMilitia.morale = Math.min(100, redMilitia.morale + 20);
+    redMilitia.training = Math.min(10, redMilitia.training + 1);
+    redMilitia.equipment = Math.min(10, redMilitia.equipment + 1);
+    
+    notes.push('💥 ARMED DEFECTION: ' + defectors + ' militiamen joined the Black Legion.');
+    notes.push('🚩 The remaining Red Militia has radicalized! They are now a hardened Vanguard.');
+  }
     
     st.affinity.bl = clamp((st.affinity.bl || 0) + 10, 0, 100);
     st.affinity.rb = clamp((st.affinity.rb || 0) - 15, 0, 100);
@@ -10049,6 +10285,14 @@ if (eff.zalgriliankingLegionRefuses) {
 
     var iiaNotes = checkIIASplinter(st, rng);
     for (var i = 0; i < iiaNotes.length; i++) notes.push(iiaNotes[i]);
+
+        
+        
+    updateAIParamilitaries(st, rng);
+    
+    
+    var redCoupNotes = checkRedMilitiaCoup(st, rng);
+    for (var i = 0; i < redCoupNotes.length; i++) notes.push(redCoupNotes[i]);
 
     var iiaJoinNotes = checkIIAJoinsZMP(st, rng);
     for (var i = 0; i < iiaJoinNotes.length; i++) notes.push(iiaJoinNotes[i]);

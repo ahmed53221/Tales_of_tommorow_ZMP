@@ -1663,16 +1663,15 @@ if (c.ownerName && !c.isHQ) {
     
     var endingData = {
       ending: 'natural_governing',
-      title: 'Natural Governing Established!',
-      subtitle: 'The monarchy of the school is complete.',
-      endingNumber: 'Ending 3',
-      body: 'The ZMP has achieved total dominance. The school is yours.',
-      story: 'With all battles won, the Black League defeated, and an absolute majority in the council (ZMP ' + zmpSeats + '/' + D.SEATS + ' seats), the ZMP has established itself as the natural governing party of the school. The left and right have been marginalized. The faculty bends to your will. The students accept your rule as inevitable.',
-      subending: 'Subending C - The Eternal Rule',
-      detail: '<div class="stat"><span>ZMP seats</span><span class="v">' + zmpSeats + ' / ' + D.SEATS + '</span></div>' +
-        '<div class="stat"><span>Unity</span><span class="v">' + Math.round(st.unity) + '</span></div>' +
-        '<div class="stat"><span>Faculty</span><span class="v">' + Math.round(st.faculty) + '</span></div>',
-      epilogue: 'The ZMP rules the school for decades. The monarchy becomes tradition. Students grow up knowing only ZMP rule.'
+              title: 'The Restored Monarchy',
+              subtitle: 'The crown returns to the school.',
+              endingNumber: 'Ending 20',
+              body: '<span class="party-zpf">The Zalgrilianists</span> have won a majority. You have restored the monarchy peacfully.',
+              story: 'The council is abolished to be replaced with <span class="party-zmp"> The house of commons</span>. But realisticly it is just a puppet to <span class="party-zpf">The king</span>. The school is governed by a king. The king took the title of King of <span class="party-zmp">Zalgrilia</span>, <span class="una">Zaliria</span>, <span class="unb">Zalia</span>',
+              subending: 'Subending T - The Crown Returns',
+              detail: '<div class="stat"><span>Week</span><span class="v">' + st.week + '</span></div>' +
+                '<div class="stat"><span>ZMP Seats</span><span class="v">' + zmpSeats + ' / ' + D.SEATS + '</span></div>',
+              epilogue: 'Years later as the school expanded king was not a king anymore yet just one <span class="party-zpf">Emperor of Zalgrilia</span>. Parties and democracy were long forgotten. We do not know what will happen in the future.But for now Long live <span class="party-zmp">Second Zalgrilian empire</span>, Long live the emperor.'
     };
     
     st.endingData = endingData;
@@ -4175,9 +4174,10 @@ function renderEventImage(eventId, eventTitle) {
     }
     
     endingHtml += '<p style="font-size:0.9rem;color:#888;letter-spacing:0.1em;text-transform:uppercase;margin-top:' + (e.ending === 'natural_governing' ? '10px' : '20px') + ';">A chapter in history closes.</p>';
-    endingHtml += '<h2 style="font-size:2.2rem;margin:10px 0 5px 0;">' + esc(e.title) + '</h2>';
+    // Remove esc() from title and subtitle
+    endingHtml += '<h2 style="font-size:2.2rem;margin:10px 0 5px 0;">' + (e.title || '') + '</h2>';
     if (e.subtitle) {
-      endingHtml += '<p style="font-size:1.1rem;color:#aaa;font-style:italic;">' + esc(e.subtitle) + '</p>';
+      endingHtml += '<p style="font-size:1.1rem;color:#aaa;font-style:italic;">' + (e.subtitle || '') + '</p>';
     }
     if (e.endingNumber) {
       endingHtml += '<p style="font-size:1rem;color:#666;margin-top:5px;">' + esc(e.endingNumber) + '</p>';
@@ -6117,8 +6117,8 @@ api.sabotageCell = function() {
       }
       
       elHtml += '<div style="font-size:0.7rem;color:#666;margin-top:2px;">Enemy Forces:</div>';
-      var enemyKeys = ['black_legion'];
-      if (st.affinity.red < 30) enemyKeys.push('red_militia');
+      var enemyKeys = ['black_legion', 'red_militia'];
+      
       
       enemyKeys.forEach(function(key) {
         if (st.paramilitaries[key]) {

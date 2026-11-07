@@ -1381,6 +1381,9 @@ ol.ideology > li:focus-visible, ul.choices li:focus-visible, header#top nav butt
 .party-bl   { color: #000000 !important; font-weight: 700; }
 .pride   { color: #c10de6 !important; font-weight: 700; }
 .ro16   { color: #e6400d !important; font-weight: 700; }
+.white   { color: #ffffff !important; font-weight: 700; }
+.unb {color: #0d4422 !important; font-weight: 700;}
+.una {color: #32ff80 !important; font-weight: 700;}
 
 
 /* Fix dark mode visibility for Black and Gray parties */

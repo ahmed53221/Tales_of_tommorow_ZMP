@@ -157,73 +157,31 @@
         endingNumber: 'Ending 34',
         body: 'The occupation succeeded. The crowd dispersed. The crown is restored.',
         story:
-          'It ended the way the Marshal had always said it would end: not with a battle, but with ' +
-          'a decision. On the seventh day, the crowd in the parking lot looked around and realized ' +
-          'that there were fewer of them than there had been on the first day, and that the ones ' +
-          'who remained were tired, and that the Legion was still standing exactly where it had ' +
-          'been standing since Monday, and that nothing had changed. The first to leave was a girl ' +
-          'in a red jacket who had helped organize the food runs. She walked out of the parking lot ' +
-          'at 4:15 in the afternoon, and nobody stopped her, and nobody called her a traitor. The ' +
-          'second to leave was a boy who had been standing near the front of the crowd, close ' +
-          'enough to see the Legion\'s faces. He left at 4:30. By 5:00, half the crowd was gone. ' +
-          'By 6:00, there were forty people left. By 7:00, there were twelve. By 8:00, there was ' +
-          'nobody. ' +
-          'The Legion did not move. The Marshal did not speak. The occupation simply continued, ' +
-          'because there was no longer anyone to oppose it. ' +
-          'On the eighth day, the Council reconvened in the Council Chamber — not in the library, ' +
-          'not in exile, but in the actual Chamber, because the Legion had opened the doors and ' +
-          'was standing outside them, and nobody had the courage to ask what would happen if they ' +
-          'tried to walk through. The Council passed a resolution recognizing the occupation as ' +
-          '"a lawful exercise of the crown\'s prerogative." The Marshal signed it. The King Putsch ' +
+          '<span class="party-red">The Protestors</span> ' +
+          'went home after a few days as they could not break <span class="party-zmp"> our defense </span> ' +
+          'the council was <span class="party-zmp"> saved </span> ' +
+          'Monarchy that was established was not absolute just yet ' +
+          'Words of <span class="ro16"> leaders of 16th </span> proved true ' +
+          'the ZMP was never democratic party ' +
+          'but yet a road to establish another <span class="party-iia">dictatorship</span> ' +
+          'but this one was independent not influenced by <span class="party-iia"> United </span> <span class="party-red"> States </span> <span class="white"> of America </span> ' +
+          'The <span class="party-zmp"> new monarchy</span> ' +
+          'Grew into a pollar of neutral powers being in opposition to both West and the East ' +
+          'The monarchy survived it all <span class="party-iia"> The CIA coups</span> <span class="party-red"> KGB ones</span> <span class="pride"> Mossad ones </span> ' +
+          'There was never a goverment in exile, ' +
+          'So <span class="party-zmp"> Zalgrilian government </span> ' +
+          'was the only one legitimate ' +
+          'as it was only one existing ' +
+          'In the end it ' +
           'was over, and the crown had won. ' +
-          'The school reopened the following Monday. The ZMP issued a statement calling for ' +
-          '"national reconciliation." The Dzehurjaca Legion was formally incorporated into the ' +
-          'school\'s security apparatus. The Marshal was promoted. And the crown, which had been ' +
-          'a symbol for two years, became something more: a fact. ' +
-          'The first week was strange. The students walked into the building through the doors ' +
-          'the Legion had held for six days, and the Legion was standing in the same position ' +
-          'they had been standing in all along, only now they were not standing in a parking lot ' +
-          '— they were standing in the main corridor, which had been repainted over the weekend ' +
-          'in the school\'s traditional colours, and someone had put a portrait of Ahmad VI on ' +
-          'the wall above the trophy case, and the whole thing looked less like an occupation ' +
-          'and more like a renovation. Teachers taught. Students studied. The principal, who had ' +
-          'been absent for the entire standoff, returned on Wednesday and gave a speech that ' +
-          'nobody remembered a word of. The Kovač family, whose son had been one of the crowd\'s ' +
-          'organizers, sent a formal letter of complaint to the Council. The Council filed it. ' +
-          'The Marshal filed his first quarterly report as Director of Security, and it was ' +
-          'thirteen pages long, and eleven of those pages were appendices, and none of the eleven ' +
-          'appendices mentioned the words "King Putsch" or "parking lot" or "crowd." He wrote it ' +
-          'himself, in longhand, on school stationery, and handed it to the Council in a brown ' +
-          'envelope on a Tuesday afternoon, and that was the last anyone in the school ever heard ' +
-          'from him about the events of that week. ' +
-          'It snowed in December. The Legion drilled in the courtyard, and the students watched ' +
-          'from the library windows, and something about the sight was no longer strange. It was ' +
-          'the way things were now. The King Putsch stopped being an event and became a season. ' +
-          'The Marshal, at the winter assembly, gave a short address on the theme of "the school ' +
-          'as a family," and the students applauded politely, and nobody in the audience was ' +
-          'entirely sure whether he was being sincere or whether he was still, in some quiet ' +
-          'register, running the operation. He probably was. It did not matter. ' +
-          'The King Putsch was studied for generations. It was taught in history classes as ' +
-          '"the moment the monarchy proved it could hold." It was cited in political science ' +
-          'textbooks as "a textbook example of a successful Kapp-style putsch." It was mentioned ' +
-          'in military academies as "the operation that proved the value of restraint." At the ' +
-          'centenary, a monument was erected in the parking lot — a simple stone slab, unadorned, ' +
-          'with a single inscription: "Here the crown held." It was not a memorial to the dead, ' +
-          'because there were none. It was not a memorial to the wounded, because there were ' +
-          'none. It was a memorial to the fact that the Legion had stood in the rain for six ' +
-          'days and not fired a shot, and that the crowd had stood in the parking lot for six ' +
-          'days and not thrown a bottle, and that the whole thing had been resolved without ' +
-          'either side having to do the thing that would have made it impossible for either ' +
-          'side to walk away. ' +
-          'The Marshal did not attend the centenary. He was ninety-four years old and living in ' +
-          'a small apartment three hundred kilometres from the school. He watched the ceremony ' +
-          'on television. When the cameras panned across the crowd and he saw the students — ' +
-          'his students, the ones who had been in the parking lot, now grandparents, some of ' +
-          'them, sitting in folding chairs with their grandchildren — he is said to have ' +
-          'smiled, and then to have turned off the television, and then to have sat in his ' +
-          'chair for a long time without moving. He had done what he had set out to do. He had ' +
-          'done it cleanly. And he had spent the rest of his life not being quite sure whether ' +
-          'that was the same thing as doing it well.',
+          'The other parties grew into opposing blocks preparing <span class="party-ro16"> a new revolution </span> ' +
+          'Two years into our rule with <span class="party-iia">European help</span>. ' +
+          'They tried to owerthrow us, ' +
+          'their revolution fell. ' +
+          'Not beacuse <span class="party-zmp"> we </span> were strong ' +
+          'but yet beacuse Europe tried to keep their involment covered up ' +
+          'Ahmad VI was crowned king of this monarchy ' +
+          'For now it is time to end transitional government and to see if this monarchy will be <span class="party-zmp"> constitutional </span> or <span class="party-zpf"> absolute </span> ',
         subending: 'Subending AH — The Crown Holds',
         detail:
           '<div class="stat"><span>Beats of standoff</span><span class="v">' + beats + '</span></div>' +
@@ -234,13 +192,9 @@
           '<div class="stat"><span>Injuries</span><span class="v">None</span></div>' +
           '<div class="stat"><span>Outcome</span><span class="v" style="color:#5fae3c;font-weight:bold;">MONARCHIST VICTORY</span></div>',
         epilogue:
-          'The crown held the building, and then it held the school. The Marshal became a ' +
-          'legend. The Legion became an institution. The King Putsch became a founding myth. ' +
-          'And the students who had stood in the parking lot on the first day, and the second, ' +
-          'and the third, and who had gone home on the seventh — they would tell their children ' +
-          'about it, and their children would not believe them, because by then the story had ' +
-          'become too large to be true. But it was true. It happened. The crowd went home. ' +
-          'The crown held.'
+          'In the end protestors had no chance ' +
+          'beacuse they needed to stop a dictatorship ' +
+          'And you do not pull out <span class="party-red"> fires </span> with <span class="party-iia"> free elections </span>. They missed their only chance. But now it is time to see who will rule <span class="party-zpf">king </span> or <span class="party-zmp"> the parlianment </span> ' 
       };
     }
 
@@ -432,32 +386,17 @@
         endingNumber: 'Ending 37',
         body: 'The Legion fired on the crowd. There were casualties. The occupation ended in blood.',
         story:
-          'At 19:04 the Marshal gave the order to advance. ' +
-          'At 19:06 the first shot was fired into the air. ' +
-          'At 19:07 the second shot was fired into the air. ' +
-          'At 19:09 a third shot was fired, and it was not fired into the air. ' +
-          'Nobody ever established who fired it. The Legion\'s official report said it was an accidental ' +
-          'discharge during a struggle. The students who were there said it was deliberate. The truth ' +
-          'was probably somewhere in between, which is where the truth usually is, and which is why it ' +
-          'was never settled. ' +
-          'The crowd dispersed within forty seconds. That was the other thing everyone remembered: not ' +
-          'the shots themselves, but how quickly the parking lot emptied. Four hundred people, gone in ' +
-          'less than a minute, leaving behind jackets and bags and a single shoe. The Legion stood where ' +
-          'it had been standing. The Marshal walked forward alone, to where a boy of seventeen had fallen, ' +
-          'and stood over the spot for some time, and then walked back to the loading dock and dismissed ' +
-          'the Legion for the evening. He did not give any further orders that night. He did not give ' +
-          'any further orders at all. ' +
-          'The boy survived. He spent two months in hospital, and when he returned to school he walked ' +
-          'with a limp that he would have for the rest of his life. He did not join any more protests. ' +
-          'He did not talk about what had happened. He graduated, and went to university, and became ' +
-          'an accountant, and if you asked him about the King Putsch he would change the subject. ' +
-          'The school closed for two weeks. When it reopened, the Council was in session, the Legion was ' +
-          'gone, and the ZMP headquarters was empty. The Marshal had resigned. The crown had been ' +
-          'formally dissolved. There was a new principal, and a new security protocol, and a new ' +
-          'set of rules about what could and could not be done in the parking lot. ' +
-          'The King Putsch was over. But it was not over, because it was never going to be over, because ' +
-          'some things are not events but wounds, and wounds do not close simply because the people ' +
-          'who inflicted them have gone home.',
+          '<span class="party-zmp"> We </span> ' +
+          'could not break protests in time for dinner.So we just <span class="party-rb"> shot them </span> ' +
+          'This had caused a full blown <span class="party-rb"> civilwar </span> ' +
+          'Between <span class="party-zmp"> us </span> and <span class="party-iia"> them </span> ' +
+          'After few monhts of <span class="party-rb"> bloody fighting </span> ' +
+          'They managed to win.' +
+          'There was a <span class="ro16"> new council </span>. ' +
+          'But without our presence IIA PL and RED formed new government. ' +
+          'Our trial was set for 15 december ' +
+          'We were convicted of <span class="party-rb"> crimes against humanity </span> ' +
+          'So <span class="party-iia"> execution </span> is today.',
         subending: 'Subending AK — The Shots',
         detail:
           '<div class="stat"><span>Beats of standoff</span><span class="v">' + beats + '</span></div>' +
@@ -467,15 +406,15 @@
           '<div class="stat"><span>Legion loyalty</span><span class="v">' + Math.round(g.legionLoyalty) + '%</span></div>' +
           '<div class="stat"><span>Outcome</span><span class="v" style="color:#cc0000;font-weight:bold;">CATASTROPHE</span></div>',
         epilogue:
-          'The Marshal was never charged. He had followed orders. The orders had been lawful. The law, ' +
-          'as it turned out, had very little to say about what had happened in that parking lot. He ' +
-          'moved to another city and took a job in private security and never spoke about the Putsch ' +
-          'again. The boy with the limp became an accountant. The school repaved the parking lot in ' +
-          'the spring. And every year, on the anniversary, a small group of students gathered in the ' +
-          'parking lot at 19:04 and stood in silence for eleven minutes, and then went home. ' +
-          'Nobody organized it. It just happened. And it kept happening, year after year, long after ' +
-          'everyone who had been there had graduated, because some things are not events but wounds, ' +
-          'and wounds do not close simply because the people who inflicted them have gone home.'
+          'They just put us but are yet to strap us, ' +
+          'On our way here <span class="party-zmp"> I </span> heard some rambling that a tenth wall was broken. ' +
+          'But yeah ZMP has failed may <span class="party-zmp"> we stand </span> unshaken  ' +
+          'Wait, why is everybody panicking ' +
+          '<span class="party-rb"> my guard is preety disracted </span> ' +
+          'I see my shot. ' +
+          'So I got him now we have a gun it is time to free <span class="party-zmp"> the others </span> ' +
+          'So we escaped the building.*explosion* Some nuke just destroyed the prison good thing <span class="party-zmp"> we </span> were not inside. ' +
+          'It seems that in the end <span class="party-zmp"> we were victorious</span>.Long live <span class="party-zpf"> new Zalgrilia</span>.'
       };
     }
 
@@ -488,31 +427,18 @@
         title: 'The Crowd Broke Through',
         subtitle: 'The Legion was overwhelmed. The occupation collapsed. The crown fell.',
         endingNumber: 'Ending 38',
-        body: 'The crowd pushed through the Legion line. The Legion did not fire. The occupation was over.',
+        body: 'The crowd pushed through our line in an massive <span class="party-red"> stampedo </span>.',
         story:
-          'It happened at 18:47, which was earlier than anyone had expected. ' +
-          'The Legion had been holding for six days. The crowd had been growing for six days. And then, ' +
-          'all at once, the line broke — not because anyone had planned it, not because anyone had ' +
-          'ordered it, but because a boy in the third row tripped, and the boy behind him stumbled, and ' +
-          'the girl behind him caught his arm, and in the space of about four seconds the whole front ' +
-          'of the crowd moved forward three feet, and the Legion moved back three feet, and that was ' +
+          '<span class="party-rb">The protestors were outnumbering us 50 to 1.</span> ' +
+          '<span class="party-zmp">Our monarchy</span> was broken from begining ' +
+          'and we did not lose beacuse we were bad but beacuse <span class="party-zmp">The coup</span> got too loud.' +
+          'We lost our leaders were all prosecuted, ' +
+          'save for one and that was the failed King <span class="party-zmp">Ahmad VI </span> he went and established ' +
+          'a fort with what was left of his folowers at ' +
           'the end of the standoff. ' +
-          'The Legion did not fire. That was the thing everyone would remember afterward. Forty men ' +
-          'with rifles, and not one of them pulled a trigger. They stood their ground for as long as ' +
-          'they could, and then they stepped aside, and the crowd poured past them into the school. ' +
-          'Some of the soldiers looked relieved. Some of them looked ashamed. Most of them just looked ' +
-          'tired. The Marshal was not among them. He had gone inside twenty minutes earlier, and when ' +
-          'the crowd reached the Council Chamber they found the door unlocked and the room empty and ' +
-          'a single sheet of paper on the table with a handwritten note: "The occupation is over. ' +
-          'I have resigned. The Legion is disbanded. I am sorry." ' +
-          'The crowd did not know what to do with an empty room. They stood in the Council Chamber ' +
-          'for a while, looking at the chairs and the table and the portrait of Ahmad VI that someone ' +
-          'had hung on the wall. Then somebody took the portrait down. Then somebody else put it back ' +
-          'up. Then somebody else took it down again. In the end they left it leaning against the ' +
-          'wall, facing away from the room, and went home. ' +
-          'The Council reconvened the following morning. The ZMP issued a statement condemning the ' +
-          'occupation and calling for "a new era of reconciliation." The Legion was formally disbanded. ' +
-          'The Marshal was never seen again. The King Putsch was over.',
+          'That was a <span class="party-zmp">fort </span> police could not break.  ' +
+          'In the end council reconvened the ZMP was banned and the old coalition of IIA RED rb PL and TIIA rose to power. ' +
+          'But in the end they lost 10% of their land to a new <span class="party-zmp"> monarchy </span> led by a cult of personality there was never a true <span class="white"> peace </span> but ZMP had no people and <span class="ro16"> new council </span> had no equipment to conquer one another ' ,
         subending: 'Subending AL — The Break',
         detail:
           '<div class="stat"><span>Beats of standoff</span><span class="v">' + beats + '</span></div>' +
@@ -522,14 +448,14 @@
           '<div class="stat"><span>Injuries</span><span class="v">None</span></div>' +
           '<div class="stat"><span>Outcome</span><span class="v" style="color:#cc0000;font-weight:bold;">DEFEAT</span></div>',
         epilogue:
-          'The Legion held the building for six days and then went home. The Marshal resigned. The ' +
-          'crown was dissolved. The ZMP headquarters was empty. And the parking lot, which had held ' +
-          'four hundred students on the first day and four hundred on the last, was repaved in the ' +
-          'spring and never mentioned again. The King Putsch was taught in history classes as ' +
-          '"a failed coup that failed because nobody believed in it." And that was true, as far as ' +
-          'it went. But it was not the whole truth, because the whole truth was that the occupation ' +
-          'had failed because the people who were supposed to defend it had decided, quietly and ' +
-          'without any drama at all, that they would not.'
+          'The ZMP was not able to take over everything ' +
+          'but they did a bit of land. ' +
+          'But now 6 years had passed we hear the IIA had broken the tenth wall whatever that means. ' +
+          'But we do hear explosions in the distance in their food silo. ' +
+          'For now a <span class="party-rb> great hunger </span> might take place. ' +
+          'So soon <span class="party-zmp">our new dzehurjaca </span> shall go' +
+          'and finish what our people started ' +
+          'Long live the true king <span class="party-zmp">Ahmad VI </span>.'
       };
     }
 

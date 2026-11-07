@@ -1000,6 +1000,31 @@
           effects: { gamble: 'blame_bl' } }
       ]
     },
+
+    {
+  id: 'last_of_us',
+  week: 22, // Make sure this matches your timeline
+  title: 'The Last of Us',
+  body: 'The Black League has massed its forces for a final assault on Ca\'uf. We lost the last battle, and our backs are against the wall. If they break through here, the school falls. The IIA is begging for your support, but the Black Legion outnumbers us. This is the decisive battle.',
+  
+  // THIS IS THE KEY:
+  condition: function(st) { 
+    return st.battle2Lost === true; 
+  },
+
+  choices: [
+    {
+      text: 'Call all allies. (Fight together with the IIA and Wein.)',
+      note: 'Requires strong paramilitaries and good relations.',
+      effects: { battle3: 'call_allies' }
+    },
+    {
+      text: 'Fight alone. The ZMP needs no one.',
+      note: 'High risk. Depends entirely on the Dzehurjaca Legion.',
+      effects: { battle3: 'fight_alone' }
+    }
+  ]
+},
     
     {
   id: 'last_dance',
