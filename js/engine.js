@@ -5116,12 +5116,12 @@ function resolveCongress(st, optionIndex, rng) {
         title: 'The Secular Republic',
         subtitle: 'A new constitution is written.',
         endingNumber: 'Ending 16',
-        body: 'The ZMP under the secularist faction has won a majority. You have transformed the school into a secular, liberal democracy.',
-        story: 'The old religious symbols are removed from the council chamber. The school is now governed by laws, not scriptures. Every student has equal rights regardless of faith. The faculty is reformed. The ZMP is the party of progress.',
+        body: 'The ZMP under the secularist faction has won a majority. The ZMP establishes a <span class="party-iia"> presidental democracy </span> .',
+        story: '<span class="party-zpf"> Religion </span> is slowly sidelined. Everything is now governed by decrees. Every student has equal rights regardless of faith to choose next <span class="text-tricolor"> president </span>. The <span class="party-bl"> The Black League </span> is never banned. But regardless they never win a majority holding at most 10 to 15% of the council. The Dzehutjaca is integrated into <span class="party-zpf"> regular miltary </span>  .',
         subending: 'Subending P - The Rights of Man',
         detail: '<div class="stat"><span>Week</span><span class="v">' + st.week + '</span></div>' +
           '<div class="stat"><span>ZMP Seats</span><span class="v">' + zmpSeats + ' / ' + D.SEATS + '</span></div>',
-        epilogue: 'The secular republic endures. The school becomes a model for the district.'
+        epilogue: '<span class="party-zmp">The new republic endures </span>. ZMP remains natural governing party only being ousted by a coalition of all parties from ZMPO to IIA.After extending their lead and <span class="party-zpf"> the monarchists </span> seeing that they will not ever establish a <span class="party-zpf">true monarchy </span> They try a violed coup. <span class="party-zpf"> The coup </span> is crushed by <span class="ro16"> by a huge opposition from every party </span> The leaders along with the king are <span class="pride"> pardoned </span>. Leading to huge accusations of coruption making some split into <span class="unb"> ZMPO </span> that was only time the ZMP was out of goverment but that coalition had fallen past paving the way for yet more years of ZMP rule'
       };
     }
 
@@ -5148,15 +5148,15 @@ function resolveCongress(st, optionIndex, rng) {
       return {
         ending: 'securro_state',
         title: 'The Security State',
-        subtitle: 'Order is restored. Freedom is the price.',
+        subtitle: '<span class="party-zmp">Monarchy </span> is restored. <span class="party-zpf">King </span> pays the price.',
         endingNumber: 'Ending 18',
-        body: 'The Securro-Zalgrilianists have won a majority. You have established a strong, disciplined state.',
-        story: 'The school is now run like a well-oiled machine. The trains run on time. The halls are clean. The students are obedient. There are no protests. There are no debates. There is only order. The ZMP is the party of the state.',
+        body: 'The Securro-Zalgrilianists have won a majority.They abolish the <span class="party-bl">Black league </span>.',
+        story: 'ZMP establishes The monarchy. But not an <span class="party-zpf"> absolute one</span>. Yet this is a <span class="party-zmp"> constitutional one </span>. Kings serves only as a figurehead. The true power lies in <span class="party-zmp">house of commons </span>.',
         subending: 'Subending R - The Iron Order',
         detail: '<div class="stat"><span>Week</span><span class="v">' + st.week + '</span></div>' +
           '<div class="stat"><span>ZMP Seats</span><span class="v">' + zmpSeats + ' / ' + D.SEATS + '</span></div>' +
           '<div class="stat"><span>Faculty</span><span class="v">' + Math.round(st.faculty) + '</span></div>',
-        epilogue: 'The security state endures. The school is stable, but the spirit of democracy is gone.'
+        epilogue: '<span class="ro16">Other parties </span> continue to exist.But never dethrone the ZMP and other <span class="unb"> king supporting </span> parties.The ZMP rules on for a long time.Any party that tried to <span class="party-rb"> rebel </span> ended up banned.Parties came and went but only one stayed.The ZMP.'
       };
     }
 

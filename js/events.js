@@ -2088,18 +2088,7 @@
 
 
 
-{
-  id: 'constitutional_convention',
-  week: 50,
-  title: '📜 THE CONSTITUTIONAL CONVENTION',
-  body:
-    'The council has voted to convene a constitutional convention. ' +
-    'For the first time, the school will have a written charter — a document that defines ' +
-    'what the council is for, who it answers to, and what rights students have. ' +
-    'Every party has a vision. You have to build a majority for yours.',
-  isConstitutionalConvention: true,
-  choices: []
-},
+
 
 // Republia (far left) — revolutionary agenda
 {
